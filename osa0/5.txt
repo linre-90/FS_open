@@ -1,0 +1,25 @@
+
+note over selain:
+Käyttäjä navigoi osoitteeseen 
+https://studies.cs.helsinki.fi/exampleapp/spa
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin-->selain: HTML-koodi
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin-->selain: spa.js
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: palautuu  [{ content: ..., date: ... }, ...]
+
+
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle.
+Tapahtumankäsittelijä on samankaltainen kuin "perinteisessä" versiossa.
+end note

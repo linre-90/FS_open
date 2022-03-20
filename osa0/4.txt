@@ -1,0 +1,33 @@
+
+note over selain:
+Käyttäjä täyttää lomakkeen ja 
+painaa save nappia.
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over palvelin:
+Post http pyyntö käsitellään "/new_note" reitillä.
+"new_note" reitti tallentaa syötteen ja suorittaa tämän 
+jäkeen uudelleen ohjauksen. 
+Ohjauksen seurauksena selain lataa osoitteen `${PATH_PREFIX}/notes`
+mikä taasen käynnistää saman ketjun kuin sivulle ensi kertaa saavuttaessa.
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: HTML-koodi, sivu latautuu uudelleen
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css, tyyli latautuu uudelleen
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js, javascript tiedosto latautuu uudelleen
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: palautuu päivitetty json objekti  [{ content: ..., date: ... }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle. 
+Muistiinpanojen lopussa on nyt käyttäjän syöttämä string merkkijono.
+end note

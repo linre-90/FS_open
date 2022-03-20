@@ -1,0 +1,24 @@
+
+note over selain:
+Käyttäjä kirjoittaa viestin
+ja painaa save nappia
+end note
+
+note over selain:
+Javascript lisää muistiinpanon notes listaan, joka
+on täytetty sivun ensimmäisellä lataus kerralla.
+Sivua ei ladata uudelleen. 
+Serveriä vain informoidaan tilan muutoksesta.
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin
+Serveri kertoo onnistuiko lisäys vai ei.
+end note
+
+palvelin-->selain: 201, {"message":"note created"}
+
+
+
+
