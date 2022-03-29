@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+
 /**
  * Generic headline with customizable header size to please lighthouse accessibly moaning...
  * @param {*} headline Text to show inside element
@@ -14,37 +15,40 @@ const Header = ({headline, headerSize}) => {
   );
 }
 
+
 /**
  * 
  * @param {*} text Text to show on button. 
  * @param {*} click function to perform when clicked.
- * @example <FeedbackButton text={"somebutton"} click={() => doStuff()}></FeedbackButton>
+ * @example <Button text={"somebutton"} click={() => doStuff()}></Button>
  * @returns react component
  */
-const FeedbackButton = ({text, click}) => {
+const Button = ({text, click}) => {
   return(
     <button onClick={click}>{text}</button>
   );
 }
 
+
 /**
- * Show text in paragraph.
+ * Renders single statistic line.
  * @param {*} text Text to show.
  * @returns react component
  */
-const Stat = ({text}) => {
+const StatisticLine = ({text}) => {
   return(
     <p>{text}</p>
   );
 }
 
+
 /**
  * Displays and calculates statistics.
-* @param {*} values array of StatObject objects. Duplicate names are not allowed!
+* @param {*} values array of StatObject objects. Duplicate names causes react key error!
  */
 const Statistics = ({values}) => {
   const countAvereage = () => {
-    //negative labeled values * 1 + positive labeled values / sum of totals
+    //negative labeled values * -1 + positive labeled values / sum of totals
     return(
       (
         values.filter(element => element.value === -1).reduce((sum, element) => sum + element.total, 0) * -1 
@@ -57,6 +61,7 @@ const Statistics = ({values}) => {
   }
 
   const countGoodPercentage = () => {
+    //positive total / all totals * 100 + "%"
     return (
       values.filter(element => element.value === 1).reduce((sum, element) => sum + element.total, 0) 
       / 
@@ -64,6 +69,7 @@ const Statistics = ({values}) => {
     );
   }
 
+  // build statistic array
   let statistics = [
     ...values,
     new StatObject("all", values.reduce((sum, element) => sum + element.total, 0)),
@@ -75,13 +81,12 @@ const Statistics = ({values}) => {
     <>
       {
         values.reduce((sum, element) => sum + element.total, 0) > 0 ? // if (sum(totals) is > 0) we have something to show...
-        statistics.map(element => <Stat key={element.name} text={`${element.name} ${element.total}`}/>)
+        statistics.map(element => <StatisticLine key={element.name} text={`${element.name} ${element.total}`}/>)
         :
-        <Stat key="nofeedback" text="no feedback given"/>
+        <StatisticLine key="nofeedback" text="no feedback given"/>
       }
     </>
   );
-
 }
 
 
@@ -109,9 +114,9 @@ const App = () => {
     <div>
       <Header headline={headlines.main} headerSize={1}></Header>
 
-      <FeedbackButton text={"good"} click={() => setGood(good + 1)}></FeedbackButton>
-      <FeedbackButton text={"neutral"} click={() => setNeutral(neutral + 1)}></FeedbackButton>
-      <FeedbackButton text={"bad"} click={() => setBad(bad + 1)}></FeedbackButton>
+      <Button text={"good"} click={() => setGood(good + 1)}></Button>
+      <Button text={"neutral"} click={() => setNeutral(neutral + 1)}></Button>
+      <Button text={"bad"} click={() => setBad(bad + 1)}></Button>
       
       <Header headline={headlines.secondary} headerSize={2}></Header>
 
