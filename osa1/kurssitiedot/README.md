@@ -1,0 +1,1 @@
+Folder contains Full stack open assignment "kurssitiedot" 1.1-1.5.
