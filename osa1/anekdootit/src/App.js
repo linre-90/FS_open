@@ -12,6 +12,7 @@ const App = () => {
     ];
 
     const [selected, setSelected] = useState(0);
+    const [points, setPoints] = useState(Array(anecdotes.length).fill(0));
 
     /**
      * Generate random number between 0 - anecdotes.length
@@ -30,6 +31,18 @@ const App = () => {
     return (
         <div>
             <p>{anecdotes[selected]}</p>
+            <p>has {points[selected]} votes</p>
+            <button
+                onClick={() =>
+                    setPoints(() => {
+                        let copy = [...points];
+                        copy[selected]++;
+                        return copy;
+                    })
+                }
+            >
+                vote
+            </button>
             <button onClick={() => setSelected(getUniqueRandom())}>
                 next anecdote
             </button>
