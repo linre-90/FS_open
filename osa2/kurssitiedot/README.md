@@ -3,4 +3,5 @@ This continues osa1 kurssitiedot assignment.
 
 done
 
+-   step7
 -   step6

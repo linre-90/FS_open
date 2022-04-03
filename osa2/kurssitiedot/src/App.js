@@ -49,15 +49,14 @@ const Content = ({ parts }) => {
  * @returns
  */
 const Total = (props) => {
-    let sum = 0;
-
-    props.parts.forEach((element) => {
-        sum += element.exercises;
-    });
+    const total = props.parts.reduce(
+        (sum, element) => element.exercises + sum,
+        0
+    );
 
     return (
         <p>
-            <b>total of {sum} exercises</b>
+            <b>total of {total} exercises</b>
         </p>
     );
 };
