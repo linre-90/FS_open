@@ -1,6 +1,10 @@
 import { useState } from "react";
+import Filter from "./components/filter";
+import PersonForm from "./components/personForm";
+import Persons from "./components/persons";
 
 const App = () => {
+    /******  state  *******/
     const [persons, setPersons] = useState([
         { name: "Arto Hellas", number: "040-123456" },
         { name: "Ada Lovelace", number: "39-44-5323523" },
@@ -11,6 +15,7 @@ const App = () => {
     const [newNumber, setnewNumber] = useState("");
     const [filter, setFilter] = useState("");
 
+    /******  Event handlers  *******/
     /**
      * function to set controlled input value
      * @param {*} event
@@ -55,50 +60,25 @@ const App = () => {
         }
     };
 
-    /**
-     * Function to filter people by names
-     * @param {*} arrayToFilter
-     * @returns
-     */
-    const filterItems = (arrayToFilter) => {
-        return arrayToFilter.filter((element) =>
-            element.name.toLowerCase().includes(filter.toLowerCase())
-        );
-    };
-
     return (
         <div>
             <h1>Phonebook</h1>
-
-            <div>
-                filter shown with
-                <input value={filter} onChange={handleFilterChange} />
-            </div>
+            <Filter
+                filter={filter}
+                changeFunction={handleFilterChange}
+            ></Filter>
 
             <h2>Add a new</h2>
-
-            <form onSubmit={addToBook}>
-                <div>
-                    name:
-                    <input value={newName} onChange={handleNameChange} />
-                    <br></br>
-                    number:
-                    <input value={newNumber} onChange={handleNumberChange} />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
+            <PersonForm
+                formSubmit={addToBook}
+                nameValue={newName}
+                numberValue={newNumber}
+                nameChangeHandler={handleNameChange}
+                numberChangeHandler={handleNumberChange}
+            ></PersonForm>
 
             <h3>Numbers</h3>
-
-            {filterItems(persons).map((person) => {
-                return (
-                    <p key={person.name}>
-                        {person.name} {person.number}
-                    </p>
-                );
-            })}
+            <Persons arrayToFilter={persons} filter={filter}></Persons>
         </div>
     );
 };
