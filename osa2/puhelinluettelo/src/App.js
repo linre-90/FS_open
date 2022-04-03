@@ -5,7 +5,7 @@ const App = () => {
     const [newName, setNewName] = useState("");
 
     /**
-     * Event to set controlled input value
+     * function to set controlled input value
      * @param {*} event
      */
     const handleNameChange = (event) => {
@@ -19,8 +19,16 @@ const App = () => {
     const addToBook = (event) => {
         event.preventDefault();
         const newContact = { name: newName };
-        setPersons(persons.concat(newContact));
-        setNewName("");
+        const foundDuplicate = persons.find(
+            (contact) => contact.name === newContact.name
+        );
+
+        if (foundDuplicate) {
+            alert(`${newContact.name} is already added to phonebook`);
+        } else {
+            setPersons(persons.concat(newContact));
+            setNewName("");
+        }
     };
 
     return (
