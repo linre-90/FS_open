@@ -33,7 +33,7 @@ const Content = ({ parts }) => {
             {parts.map((element) => {
                 return (
                     <Part
-                        key={element.name}
+                        key={element.id}
                         description={element.name}
                         exercises={element.exercises}
                     />
@@ -44,7 +44,7 @@ const Content = ({ parts }) => {
 };
 
 /**
- *
+ * Renders total number of exercices
  * @param {*} props
  * @returns
  */
@@ -55,7 +55,11 @@ const Total = (props) => {
         sum += element.exercises;
     });
 
-    return <p>Number of exercises {sum}</p>;
+    return (
+        <p>
+            <b>total of {sum} exercises</b>
+        </p>
+    );
 };
 
 /**
@@ -68,7 +72,7 @@ const Course = ({ course }) => {
         <>
             <Header name={course.name} />
             <Content parts={course.parts} />
-            {/*<Total parts={course.parts} />*/}
+            <Total parts={course.parts} />
         </>
     );
 };
@@ -93,15 +97,17 @@ const App = () => {
                 exercises: 14,
                 id: 3,
             },
+            {
+                name: "Redux",
+                exercises: 11,
+                id: 4,
+            },
         ],
     };
 
     return (
         <div>
             <Course course={course}></Course>
-            {/*<Header name={course.name} />*/}
-            {/*<Content parts={course.parts} />*/}
-            {/*<Total parts={course.parts} />*/}
         </div>
     );
 };
