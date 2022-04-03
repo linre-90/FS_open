@@ -2,10 +2,14 @@ import { useState } from "react";
 
 const App = () => {
     const [persons, setPersons] = useState([
-        { name: "Arto Hellas", number: "040-1231244" },
+        { name: "Arto Hellas", number: "040-123456" },
+        { name: "Ada Lovelace", number: "39-44-5323523" },
+        { name: "Dan Abramov", number: "12-43-234345" },
+        { name: "Mary Poppendieck", number: "39-23-6423122" },
     ]);
     const [newName, setNewName] = useState("");
     const [newNumber, setnewNumber] = useState("");
+    const [filter, setFilter] = useState("");
 
     /**
      * function to set controlled input value
@@ -21,6 +25,14 @@ const App = () => {
      */
     const handleNumberChange = (event) => {
         setnewNumber(event.target.value);
+    };
+
+    /**
+     * function to set controlled input value
+     * @param {*} event
+     */
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
     };
 
     /**
@@ -43,9 +55,28 @@ const App = () => {
         }
     };
 
+    /**
+     * Function to filter people by names
+     * @param {*} arrayToFilter
+     * @returns
+     */
+    const filterItems = (arrayToFilter) => {
+        return arrayToFilter.filter((element) =>
+            element.name.toLowerCase().includes(filter.toLowerCase())
+        );
+    };
+
     return (
         <div>
-            <h2>Phonebook</h2>
+            <h1>Phonebook</h1>
+
+            <div>
+                filter shown with
+                <input value={filter} onChange={handleFilterChange} />
+            </div>
+
+            <h2>Add a new</h2>
+
             <form onSubmit={addToBook}>
                 <div>
                     name:
@@ -58,11 +89,13 @@ const App = () => {
                     <button type="submit">add</button>
                 </div>
             </form>
-            <h2>Numbers</h2>
-            {persons.map((contact) => {
+
+            <h3>Numbers</h3>
+
+            {filterItems(persons).map((person) => {
                 return (
-                    <p key={contact.name}>
-                        {contact.name} {contact.number}
+                    <p key={person.name}>
+                        {person.name} {person.number}
                     </p>
                 );
             })}
