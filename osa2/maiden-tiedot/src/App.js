@@ -18,6 +18,12 @@ const App = () => {
         setFilteredData(filterData(event.target.value));
     };
 
+    // show button functionality
+    const showButtonAction = (country) => {
+        setSearch(country);
+        setFilteredData(filterData(country));
+    };
+
     // get initial state
     useEffect(() => {
         axios.get("https://restcountries.com/v3.1/all").then((response) => {
@@ -64,7 +70,10 @@ const App = () => {
                     flag={filteredData[0].flags.png}
                 ></Single>
             ) : (
-                <Results filteredData={filteredData}></Results>
+                <Results
+                    filteredData={filteredData}
+                    showBtnCallback={showButtonAction}
+                ></Results>
             )}
         </div>
     );

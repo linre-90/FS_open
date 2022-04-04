@@ -3,11 +3,24 @@
  * @param {*} filteredData Results array
  * @returns
  */
-const Results = ({ filteredData }) => {
+const Results = ({ filteredData, showBtnCallback }) => {
     return (
         <div>
             {filteredData.map((element) => {
-                return <p key={element.cca2}>{element.name.common}</p>;
+                return (
+                    <>
+                        <p key={element.cca2}>
+                            {element.name.common}{" "}
+                            <button
+                                onClick={() => {
+                                    showBtnCallback(element.name.common);
+                                }}
+                            >
+                                show
+                            </button>
+                        </p>
+                    </>
+                );
             })}
         </div>
     );
