@@ -49,7 +49,7 @@ const App = () => {
     };
 
     return (
-        <div>
+        <>
             {!loading ? (
                 <SearchForm
                     state={search}
@@ -75,7 +75,7 @@ const App = () => {
                     showBtnCallback={showButtonAction}
                 ></Results>
             )}
-        </div>
+        </>
     );
 };
 

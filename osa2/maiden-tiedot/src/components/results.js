@@ -8,8 +8,8 @@ const Results = ({ filteredData, showBtnCallback }) => {
         <div>
             {filteredData.map((element) => {
                 return (
-                    <>
-                        <p key={element.cca2}>
+                    <span key={element.cca2}>
+                        <p>
                             {element.name.common}{" "}
                             <button
                                 onClick={() => {
@@ -19,7 +19,7 @@ const Results = ({ filteredData, showBtnCallback }) => {
                                 show
                             </button>
                         </p>
-                    </>
+                    </span>
                 );
             })}
         </div>
