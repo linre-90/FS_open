@@ -31,7 +31,7 @@ const Single = ({ name, capital, area, languages, flag }) => {
                     return <li key={key}>{languages[key]}</li>;
                 })}
             </ul>
-            <img src={flag}></img>
+            <img src={flag} alt={"country flag"}></img>
         </div>
     );
 };

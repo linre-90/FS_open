@@ -12,6 +12,7 @@ const Weather = ({ weather }) => {
                 <p>temperature {weather.main.temp} Celcius</p>
                 <img
                     src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                    alt={"Weather forecast"}
                 ></img>
                 <p>wind {weather.wind.speed} m/s</p>
             </>

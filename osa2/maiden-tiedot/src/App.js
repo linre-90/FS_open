@@ -58,6 +58,9 @@ const App = () => {
                     });
             }
         }
+        // No need to call this hook when weather changes.
+        // It also should cause infinitive loop without if statement above?
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filteredData]);
 
     //function to filter countries by name
