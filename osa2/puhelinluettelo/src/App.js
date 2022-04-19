@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/filter";
 import PersonForm from "./components/personForm";
 import Persons from "./components/persons";
+import Notification from "./components/notification";
 import service from "./services/service";
 
 const App = () => {
@@ -11,6 +12,8 @@ const App = () => {
     const [newName, setNewName] = useState("");
     const [newNumber, setnewNumber] = useState("");
     const [filter, setFilter] = useState("");
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     /******  Hooks  *******/
     // fetch initial data
@@ -66,13 +69,15 @@ const App = () => {
                             .concat(data)
                             .sort((a, b) =>  {return a.id - b.id;})
                         );
-                    });
+                        showNotification(`Updated ${foundDuplicate.name}`, false)
+                    }).catch(error => showNotification(`Information of ${foundDuplicate.name} has already been removed from server`, true));
             }
         } else {
             service.addNewPerson(newContact).then((data) => {
                 setPersons(persons.concat(data));
                 setnewNumber("");
                 setNewName("");
+                showNotification(`Added ${newContact.name}`, false);
             });
         }
     };
@@ -90,14 +95,39 @@ const App = () => {
                             return value.id !== person.id;
                         })
                     );
+                    showNotification(`Deleted ${person.name}`, false);
                 }
             });
+        }
+    };
+
+    /**
+     * Display notification component to user.
+     * @param {*} message message to display in notification.
+     * @param {*} error is error or not
+     */
+    const showNotification = (message, error) => {
+        if (error) {
+            setErrorMessage(message);
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000);
+        } else {
+            setSuccessMessage(message);
+            setTimeout(() => {
+                setSuccessMessage(null);
+            }, 5000);
         }
     };
 
     return (
         <div>
             <h1>Phonebook</h1>
+            <Notification
+                message={successMessage}
+                isError={false}
+            ></Notification>
+            <Notification message={errorMessage} isError={true}></Notification>
             <Filter
                 filter={filter}
                 changeFunction={handleFilterChange}
