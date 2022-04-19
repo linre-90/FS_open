@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import Filter from "./components/filter";
 import PersonForm from "./components/personForm";
 import Persons from "./components/persons";
+import service from "./services/service";
 
 const App = () => {
     /******  state  *******/
@@ -15,12 +15,7 @@ const App = () => {
     /******  Hooks  *******/
     // fetch initial data
     useEffect(() => {
-        //prettier-ignore
-        axios
-            .get("http://localhost:3001/persons")
-            .then((response) => {
-                setPersons(response.data);
-            });
+        service.getAll().then((data) => setPersons(data));
     }, []);
 
     /******  Event handlers  *******/
@@ -49,7 +44,7 @@ const App = () => {
     };
 
     /**
-     * Function to add contact in phonebook
+     * Function to add contact in phonebook or update number if person exists.
      * @param {*} event
      */
     const addToBook = (event) => {
@@ -58,13 +53,45 @@ const App = () => {
         const foundDuplicate = persons.find(
             (contact) => contact.name === newContact.name
         );
-
         if (foundDuplicate) {
-            alert(`${newContact.name} is already added to phonebook`);
+            //prettier-ignore
+            if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+                service
+                    .updatePerson(foundDuplicate.id, newContact)
+                    .then((data) => {
+                        setPersons(
+                            persons.filter((value) => {
+                                return value.id != foundDuplicate.id
+                            })
+                            .concat(data)
+                            .sort((a, b) =>  {return a.id - b.id;})
+                        );
+                    });
+            }
         } else {
-            setPersons(persons.concat(newContact));
-            setnewNumber("");
-            setNewName("");
+            service.addNewPerson(newContact).then((data) => {
+                setPersons(persons.concat(data));
+                setnewNumber("");
+                setNewName("");
+            });
+        }
+    };
+
+    /**
+     * callback to delete user from db.
+     * @param {*} id users id
+     */
+    const deleteUser = (person) => {
+        if (window.confirm(`Delete ${person.name} ?`)) {
+            service.removePerson(person.id).then((data) => {
+                if (data === 200) {
+                    setPersons(
+                        persons.filter((value) => {
+                            return value.id !== person.id;
+                        })
+                    );
+                }
+            });
         }
     };
 
@@ -86,7 +113,11 @@ const App = () => {
             ></PersonForm>
 
             <h3>Numbers</h3>
-            <Persons arrayToFilter={persons} filter={filter}></Persons>
+            <Persons
+                arrayToFilter={persons}
+                filter={filter}
+                removeCallback={deleteUser}
+            ></Persons>
         </div>
     );
 };

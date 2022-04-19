@@ -3,11 +3,18 @@
  * @param {*} person person object
  * @returns
  */
-const SinglePerson = ({ person }) => {
+const SinglePerson = ({ person, removeCallback }) => {
     return (
         <>
             <p key={person.name}>
                 {person.name} {person.number}
+                <button
+                    onClick={() => {
+                        removeCallback(person);
+                    }}
+                >
+                    delete
+                </button>
             </p>
         </>
     );
@@ -19,7 +26,7 @@ const SinglePerson = ({ person }) => {
  * @param {*} filter filter string
  * @returns
  */
-const Persons = ({ arrayToFilter, filter }) => {
+const Persons = ({ arrayToFilter, filter, removeCallback }) => {
     /**
      * Function to filter people by names
      * @param {*} listToFilter
@@ -39,6 +46,7 @@ const Persons = ({ arrayToFilter, filter }) => {
                     <SinglePerson
                         key={person.name}
                         person={person}
+                        removeCallback={removeCallback}
                     ></SinglePerson>
                 );
             })}
