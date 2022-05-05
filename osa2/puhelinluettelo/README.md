@@ -1,6 +1,7 @@
 This is fullstack open course assignmnet puhelinluettelo.
 
 done
+-3.10
 -2.20
 -2.19
 -2.18

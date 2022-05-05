@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3001/api/persons";
+const URL = "/api/persons";
 
 /**
  * Function to get all persons from db.
