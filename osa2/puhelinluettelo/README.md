@@ -1,7 +1,10 @@
 This is fullstack open course assignmnet puhelinluettelo.
 
+Did not setup automate build folder transfer.
+
 done
--3.10
+-3.11
+-3.9
 -2.20
 -2.19
 -2.18
