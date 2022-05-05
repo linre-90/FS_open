@@ -57,6 +57,13 @@ const App = () => {
             (contact) => contact.name === newContact.name
         );
         if (foundDuplicate) {
+            // <TODO REMOVE IN 3.17>
+            window.alert(
+                "Unsupported operation: update number. Updating number is not yet supported"
+            );
+            return;
+            //  </TODO REMOVE IN 3.17>
+
             //prettier-ignore
             if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
                 service
@@ -64,7 +71,7 @@ const App = () => {
                     .then((data) => {
                         setPersons(
                             persons.filter((value) => {
-                                return value.id != foundDuplicate.id
+                                return value.id !== foundDuplicate.id
                             })
                             .concat(data)
                             .sort((a, b) =>  {return a.id - b.id;})
@@ -89,7 +96,7 @@ const App = () => {
     const deleteUser = (person) => {
         if (window.confirm(`Delete ${person.name} ?`)) {
             service.removePerson(person.id).then((data) => {
-                if (data === 200) {
+                if (data === 204) {
                     setPersons(
                         persons.filter((value) => {
                             return value.id !== person.id;
