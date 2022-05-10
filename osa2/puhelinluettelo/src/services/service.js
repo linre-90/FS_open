@@ -38,8 +38,6 @@ const removePerson = (id) => {
  */
 const updatePerson = (id, newPerson) => {
     const request = axios.put(`${URL}/${id}`, newPerson);
-    // cause error request to show error notification component
-    //const request = axios.put(`${URL}/${id + 55}`, newPerson);
     return request.then((response) => response.data);
 };
 
