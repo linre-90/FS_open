@@ -71,7 +71,7 @@ const App = () => {
                                 .sort((a, b) => { return a.id - b.id; })
                         );
                         showNotification(`Updated ${foundDuplicate.name}`, false)
-                    }).catch(error => showNotification(`Information of ${foundDuplicate.name} has already been removed from server`, true));
+                    }).catch(error => showNotification(error.response.data.error, true));
             }
         } else {
             service.addNewPerson(newContact).then((data) => {
