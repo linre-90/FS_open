@@ -56,6 +56,7 @@ const App = () => {
         const foundDuplicate = persons.find(
             (contact) => contact.name === newContact.name
         );
+
         if (foundDuplicate) {
             //prettier-ignore
             if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
@@ -78,7 +79,7 @@ const App = () => {
                 setnewNumber("");
                 setNewName("");
                 showNotification(`Added ${newContact.name}`, false);
-            });
+            }).catch(error => showNotification(error.response.data.error, true));
         }
     };
 
