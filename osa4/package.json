@@ -1,0 +1,11 @@
+{
+  "name": "osa4",
+  "version": "1.0.0",
+  "description": "Full stack open 2022 part 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juho Lindemark",
+  "license": "ISC"
+}
