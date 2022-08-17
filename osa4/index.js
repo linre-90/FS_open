@@ -1,8 +1,8 @@
-const http = require('http');
-const express = require('express');
+const http = require("http");
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
+const cors = require("cors");
+const mongoose = require("mongoose");
 
 const blogSchema = mongoose.Schema({
   title: String,
@@ -11,15 +11,15 @@ const blogSchema = mongoose.Schema({
   likes: Number
 });
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
-const mongoUrl = 'mongodb://localhost/bloglist';
+const mongoUrl = "mongodb://localhost/bloglist";
 mongoose.connect(mongoUrl);
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/blogs', (request, response) => {
+app.get("/api/blogs", (request, response) => {
   Blog
     .find({})
     .then(blogs => {
@@ -27,7 +27,7 @@ app.get('/api/blogs', (request, response) => {
     });
 });
 
-app.post('/api/blogs', (request, response) => {
+app.post("/api/blogs", (request, response) => {
   const blog = new Blog(request.body)
 
   blog
