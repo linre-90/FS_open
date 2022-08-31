@@ -4,8 +4,8 @@
   "description": "Full stack open 2022 part 4",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js localhost 8080",
-    "test": "jest --verbose"
+    "dev": "cross-env NODE_ENV=development nodemon ./index.js localhost 8080",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit"
   },
   "author": "Juho Lindemark",
   "license": "ISC",
@@ -16,7 +16,9 @@
     "mongoose": "^6.5.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^28.1.3",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4"
   }
 }
