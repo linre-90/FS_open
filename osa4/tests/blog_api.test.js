@@ -27,13 +27,11 @@ const initialBlogs = [
 ]
 
 beforeEach(async () => {
-  await Blog.deleteMany({});
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[2]);
-  await blogObject.save();
+  await Blog.deleteMany({})
+
+  const blogObjects = initialBlogs.map(bl => new Blog(bl))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
 });
 
 test("returnet blog count correct", async () => {
@@ -110,6 +108,50 @@ test("blog storage expected title an url", async () => {
 
   response = await api.post("/api/blogs").send(newBlogNoUrlOrTitle);
   expect(response.statusCode).toBe(400);
+});
+
+
+test("delete blog correctly", async () => {
+  const responseAll = await api.get("/api/blogs");
+
+  const initialLen = responseAll.body.length;
+  const removeId = responseAll.body[1].id;
+
+  const response = await api.delete(`/api/blogs/${removeId}`);
+
+  const responseAfterDelete = await api.get("/api/blogs");
+
+  expect(response.statusCode).toBe(204);
+  expect(responseAfterDelete.body).toHaveLength(initialLen - 1);
+  initialBlogs.forEach(element => {
+    expect(element._id).not.toBe(removeId);
+  });
+});
+
+
+test("delete with falty id", async () => {
+  const response = await api.delete(`/api/blogs/1`);
+  expect(response.statusCode).toBe(404);
+});
+
+
+test("update entry", async () => {
+  const responseAll = await api.get("/api/blogs");
+
+  const updateId = responseAll.body[1].id;
+  
+  const newValues = {
+    "title": "Hello universe",
+    "author": "Update text",
+    "url": "/2",
+    "likes": 666
+  }
+
+  const response = await api.put(`/api/blogs/${updateId}`).send(newValues);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.body.author).toBe(newValues.author);
+  expect(response.body.likes).toBe(newValues.likes);
 });
 
 
