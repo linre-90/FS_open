@@ -27,11 +27,11 @@ const initialBlogs = [
 ]
 
 beforeEach(async () => {
-  await Blog.deleteMany({})
+  await Blog.deleteMany({});
 
-  const blogObjects = initialBlogs.map(bl => new Blog(bl))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  const blogObjects = initialBlogs.map(bl => new Blog(bl));
+  const promiseArray = blogObjects.map(blog => blog.save());
+  await Promise.all(promiseArray);
 });
 
 test("returnet blog count correct", async () => {
