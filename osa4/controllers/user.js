@@ -8,6 +8,25 @@ const User = require("../models/User");
 usersRouter.post("/", async (request, response) => {
     const { username, name, password } = request.body;
 
+    // All data validations are made in here.
+    // Not in mongoose schema.
+    // Validate length min 3 
+
+    if(username == undefined || password == undefined || name == undefined){
+        return response.status(400).send("Invalid request, missing fields.");
+    }
+
+
+    if(username.length < 4 || password.length < 4 ){
+        return response.status(400).send("Username or password too short.");
+    }
+
+    // Validate username does not exists
+    const queryByUsername = await User.find({username: username});
+    if(queryByUsername.length > 0){
+        return response.status(400).send("Username must be unique.");
+    }
+
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
     const user = new User({
@@ -17,7 +36,6 @@ usersRouter.post("/", async (request, response) => {
     });
 
     const savedUser = await user.save();
-
     response.status(201).json(savedUser);
 });
 
@@ -28,7 +46,7 @@ usersRouter.get("/", async (request, response) => {
     const users = await User.find({});
     const parsedUsers = users.map(user => {
         return {
-            username: user.name,
+            username: user.username,
             name: user.name,
             id: user.id
         };
