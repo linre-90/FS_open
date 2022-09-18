@@ -58,6 +58,20 @@ test("user creation should fail empty username", async () => {
 });
 
 
+test("user creation should fail with short password", async () => {
+    const response = await api.post("/api/users").send({"name": "asd", "username": "asddasdljkndkfjg", "password":"asd"});
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe("Username or password too short.");
+});
+
+
+test("user creation should fail with short username", async () => {
+    const response = await api.post("/api/users").send({"name": "asd", "username": "ds", "password":"salasana123456"});
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toBe("Username or password too short.");
+});
+
+
 test("user post request should fail with missing fields", async () => {
     const response = await api.post("/api/users").send({"name": "asd", "password":"dsasdasdasd"});
     expect(response.statusCode).toBe(400);
