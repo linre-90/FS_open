@@ -43,15 +43,8 @@ usersRouter.post("/", async (request, response) => {
  * Route to fetch all users from db.
  */
 usersRouter.get("/", async (request, response) => {
-    const users = await User.find({});
-    const parsedUsers = users.map(user => {
-        return {
-            username: user.username,
-            name: user.name,
-            id: user.id
-        };
-    });
-    response.json(parsedUsers);
+    const users = await User.find({}, { username:1 ,name:1} ).populate("blogs", {url:1, title:1, author:1});
+    response.json(users);
 });
 
 module.exports = usersRouter;
