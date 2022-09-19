@@ -1,10 +1,8 @@
+const mongoose = require("mongoose");
+
 /**
  * Blog mongoose model
  */
-
-
-const mongoose = require("mongoose");
-
 const blogSchema = mongoose.Schema({
     title: { type: String, required: [true] },
     author: String,
@@ -16,7 +14,7 @@ const blogSchema = mongoose.Schema({
     }
 });
 
-// override _id to id
+// override _id to id and remove _v.
 blogSchema.set("toJSON", {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString();
@@ -25,6 +23,7 @@ blogSchema.set("toJSON", {
     }
 });
   
+// For exporting
 const Blog = mongoose.model("Blog", blogSchema);
 
 module.exports = Blog;

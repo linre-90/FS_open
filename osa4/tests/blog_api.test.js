@@ -1,3 +1,7 @@
+/**
+ * File contains tests for blog route.
+ */
+
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../index");

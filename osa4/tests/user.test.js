@@ -1,3 +1,7 @@
+/**
+ * User route tests.
+ */
+
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const User = require("../models/User");

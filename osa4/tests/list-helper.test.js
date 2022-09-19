@@ -1,3 +1,7 @@
+/**
+ * list-helper tests.
+ */
+
 const listHelper = require("../utils/list-helper");
 
 test("dummy returns one", () => {

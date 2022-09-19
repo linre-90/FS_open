@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+
+/**
+ * User mongoose model.
+ */
 const userSchema = new mongoose.Schema({
   username: String,
   name: String,
@@ -21,6 +25,7 @@ userSchema.set("toJSON", {
   }
 });
 
+// For extracting.
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
