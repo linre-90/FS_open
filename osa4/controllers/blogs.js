@@ -46,10 +46,17 @@ blogRouter.post("/", async (request, response) => {
 /**
  * Route to delete blog post.
  */
-blogRouter.delete("/:id", (request, response) => {
-    Blog.findByIdAndRemove(request.params.id)
-        .then(result => response.status(204).send())
-        .catch(error => response.status(404).send());    
+blogRouter.delete("/:id", async (request, response) => {
+    const blog = await Blog.findById(request.params.id);
+    const decodedToken = jwt.verify(request.headers.token, utils.SECRET); 
+    const user = await User.findById(decodedToken.id);
+
+    if(user.id.toString() === blog.user.toString()){
+        blog.remove();
+        response.status(204).send();
+    }else{
+        response.status(404).json({error: "Invalid user. Deletion canceled."});
+    }
 });
 
 
