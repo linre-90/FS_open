@@ -22,12 +22,12 @@ blogRouter.get("/", async (request, response) => {
  */
 blogRouter.post("/", async (request, response) => {
     const blog = new Blog(request.body);
-    const decodedToken = jwt.verify(request.headers.token, utils.SECRET);
-    
-    if(!decodedToken.id){
+    const user = request.headers.user;
+
+    if(!user._id){
         return response.status(401).json({error: "Token missing or invalid"});
     }
-    const user = await User.findById(decodedToken.id);
+
     blog.user = user._id;
 
     try {
@@ -47,9 +47,8 @@ blogRouter.post("/", async (request, response) => {
  * Route to delete blog post.
  */
 blogRouter.delete("/:id", async (request, response) => {
-    const blog = await Blog.findById(request.params.id);
-    const decodedToken = jwt.verify(request.headers.token, utils.SECRET); 
-    const user = await User.findById(decodedToken.id);
+    const blog = await Blog.findById(request.params.id); 
+    const user = request.headers.user;
 
     if(user.id.toString() === blog.user.toString()){
         blog.remove();
