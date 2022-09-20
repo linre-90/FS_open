@@ -4,9 +4,7 @@
 
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog.js");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const utils = require("../utils/config");
+const userExtractor = require("../middlewares/userExtractor");
 
 /**
  * Returns all blogs.
@@ -20,15 +18,16 @@ blogRouter.get("/", async (request, response) => {
 /**
  * Route to post new blog post
  */
-blogRouter.post("/", async (request, response) => {
+blogRouter.post("/", userExtractor ,async (request, response) => {
     const blog = new Blog(request.body);
     const user = request.headers.user;
 
-    if(!user._id){
+    if(!user){
         return response.status(401).json({error: "Token missing or invalid"});
     }
 
     blog.user = user._id;
+    
 
     try {
         const savedBlog = await blog.save();
@@ -36,7 +35,7 @@ blogRouter.post("/", async (request, response) => {
         await user.save();
         response.status(201).json(savedBlog);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         response.status(400).send();
     }
     
@@ -46,19 +45,24 @@ blogRouter.post("/", async (request, response) => {
 /**
  * Route to delete blog post.
  */
-blogRouter.delete("/:id", async (request, response) => {
-    const blog = await Blog.findById(request.params.id); 
+blogRouter.delete("/:id", userExtractor, async (request, response) => {
+    let blog = ""; 
+
+    try {
+        blog = await Blog.findById(request.params.id);
+    } catch (error) {
+        return response.status(404).json({error: "Invalid request. Document not found."});
+    }
+    
     const user = request.headers.user;
 
-    if(user.id.toString() === blog.user.toString()){
+    if(user && user.id.toString() === blog.user.toString()){
         blog.remove();
         response.status(204).send();
     }else{
         response.status(404).json({error: "Invalid user. Deletion canceled."});
     }
 });
-
-
 
 /**
  * Route to update blog post.

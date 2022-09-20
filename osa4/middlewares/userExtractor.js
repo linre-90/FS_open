@@ -14,7 +14,7 @@ const utils = require("../utils/config");
         request.headers["user"] = user; 
     
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
     }finally{
         next();
     } 
