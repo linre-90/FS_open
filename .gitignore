@@ -1,3 +1,4 @@
 node_modules
 .env
 .env.*
+osa5/blog-backend/*
