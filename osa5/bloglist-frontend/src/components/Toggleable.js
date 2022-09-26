@@ -28,4 +28,4 @@ const Toggleable = (props) => {
     );
 };
 
-export default Toggleable;
+export {Toggleable};

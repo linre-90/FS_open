@@ -26,4 +26,4 @@ const Message = ({message, panic}) =>{
 }
 
 
-export {Message}
+export { Message }
