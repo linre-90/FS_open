@@ -59,6 +59,26 @@ const App = () => {
         }
     };
 
+    // Update likes
+    const updateLikes = async (blog) => {
+        try {
+            const response = await blogService.update(blog);
+            setMessage(
+                `A blog ${response.title} by ${response.author} updated`
+            );
+            setTimeout(() => {
+                setMessage(null);
+            }, 5000);
+            return response;
+        } catch (error) {
+            //console.log(error);
+            setErrorMessage("Adding blog failed");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000);
+        }
+    }
+
     const logout = () => {
         window.localStorage.clear();
         window.location.href = "/";
@@ -138,7 +158,7 @@ const App = () => {
             
             {/* Show blogs */}
             {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} blog={blog} handleLikeUpdate={updateLikes} />
             ))}
         </div>
     );
