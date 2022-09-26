@@ -94,7 +94,19 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        blogService.getAll().then((blogs) => setBlogs(blogs));
+        blogService.getAll().then((blogs) =>{
+            // Sort blogs based on likes top -> bottom
+            const sorted = blogs.sort((a,b) => { 
+                if(a.likes < b.likes){
+                    return 1;
+                } 
+                if(a.likes > b.likes){
+                    return -1;
+                }
+                return 0;
+            });
+            setBlogs(sorted);
+        });
     }, []);
 
     if (user === null) {
