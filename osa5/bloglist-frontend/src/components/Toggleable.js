@@ -1,11 +1,12 @@
-import { useState, React } from "react";
+import { useState, React , forwardRef, useImperativeHandle} from "react";
 
 /**
  * Wrapper component to show or hide children components.
  * @param {*} props
  * @returns
  */
-const Toggleable = (props) => {
+const Toggleable = forwardRef((props, refs) => {
+
     const [visible, setVisible] = useState(false);
 
     const hideWhenVisible = { display: visible ? "none" : "" };
@@ -14,6 +15,12 @@ const Toggleable = (props) => {
     const toggleVisibility = () => {
         setVisible(!visible);
     };
+
+    useImperativeHandle(refs, () => {
+        return {
+            toggleVisibility
+        }
+    });
 
     return (
         <div>
@@ -26,6 +33,6 @@ const Toggleable = (props) => {
             </div>
         </div>
     );
-};
+});
 
 export {Toggleable};

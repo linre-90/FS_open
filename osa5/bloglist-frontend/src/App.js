@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginservice from "./services/login";
@@ -11,6 +11,7 @@ const App = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
+    const newBlogRef = useRef();
 
     // notification
     const [errorMessage, setErrorMessage] = useState(null);
@@ -40,6 +41,7 @@ const App = () => {
 
     // Post new blog
     const createNewBlog = async (blog) => {
+        newBlogRef.current.toggleVisibility();
         try {
             const response = await blogService.create(blog);
             setMessage(
@@ -130,7 +132,7 @@ const App = () => {
             </p>
 
 
-            <Toggleable buttonLabel={"Create new blog"} >
+            <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef} >
                 <CreateBlog createBlog={createNewBlog} />
             </Toggleable>
             
