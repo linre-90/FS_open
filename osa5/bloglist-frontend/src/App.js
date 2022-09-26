@@ -79,6 +79,25 @@ const App = () => {
         }
     }
 
+    const deleteBlog = async(blogid) => {
+        try {
+            const response = await blogService.deleteBlog(blogid);
+            setMessage(
+                `A blog deleted succesfully`
+            );
+            setTimeout(() => {
+                setMessage(null);
+            }, 5000);
+            return response;
+        } catch (error) {
+            console.log(error);
+            setErrorMessage("Deleting blog failed");
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000);
+        }
+    }
+
     const logout = () => {
         window.localStorage.clear();
         window.location.href = "/";
@@ -154,7 +173,7 @@ const App = () => {
 
             {/* Notification */}
             {errorMessage !== null && (
-                <Message message={message} panic={true} />
+                <Message message={errorMessage} panic={true} />
             )}
 
             {message !== null && <Message message={message} panic={false} />}
@@ -165,12 +184,12 @@ const App = () => {
 
 
             <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef} >
-                <CreateBlog createBlog={createNewBlog} />
+                <CreateBlog createBlog={createNewBlog}/>
             </Toggleable>
             
             {/* Show blogs */}
             {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} handleLikeUpdate={updateLikes} />
+                <Blog key={blog.id} blog={blog} handleLikeUpdate={updateLikes} handleDelete={deleteBlog}/>
             ))}
         </div>
     );

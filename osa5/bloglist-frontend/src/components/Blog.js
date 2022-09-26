@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 
-const Blog = ({ blog, handleLikeUpdate }) => {
+const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     const [display, setDisplay] = useState(false);
     const [blogState, setBlogState] = useState(blog);
     const [updatingLikes, setUpdatingLikes] = useState(true);
@@ -19,6 +19,13 @@ const Blog = ({ blog, handleLikeUpdate }) => {
         if(responseBlog){
             setBlogState(responseBlog);
             setUpdatingLikes(false);
+        }
+    }
+
+    // Handles delete
+    const deleteBlog = () => {
+        if(window.confirm(`Remove blog ${blogState.title} by ${blogState.author}`)){
+            handleDelete(blogState.id);
         }
     }
 
@@ -56,6 +63,7 @@ const Blog = ({ blog, handleLikeUpdate }) => {
                     <div>{blogState.url}</div>
                     <div>likes: {blogState.likes}{updatingLikes? <></>:<button onClick={update} >Like</button>}</div>
                     <div>{blogState.author}</div>
+                    <div><button onClick={deleteBlog} >Delete</button></div>
                 </>
             ) : (
                 <></>
