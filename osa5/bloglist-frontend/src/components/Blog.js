@@ -3,7 +3,6 @@ import { React, useEffect, useState } from "react";
 const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     const [display, setDisplay] = useState(false);
     const [blogState, setBlogState] = useState(blog);
-    const [updatingLikes, setUpdatingLikes] = useState(true);
 
     const updateDisplay = () => {
         setDisplay(!display);
@@ -11,14 +10,12 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
 
     // Send updated blog to server and update state after.
     const update = async() => {
-        setUpdatingLikes(true);
         let updatedBlog = blogState;
         updatedBlog.likes = blogState.likes + 1;
         updatedBlog.user = blogState.user.id;
         const responseBlog = await handleLikeUpdate(updatedBlog);
         if(responseBlog){
             setBlogState(responseBlog);
-            setUpdatingLikes(false);
         }
     };
 
@@ -36,7 +33,6 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             newBlogObj.likes = 0;
             setBlogState(newBlogObj);
         }
-        setUpdatingLikes(false);
     },[]);
 
     const blogStyle = {
@@ -61,7 +57,7 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             {display ? (
                 <>
                     <div>{blogState.url}</div>
-                    <div>likes: {blogState.likes}{updatingLikes? <></>:<button onClick={update} >Like</button>}</div>
+                    <div>likes: {blogState.likes}<button onClick={update} >Like</button></div>
                     <div>{blogState.author}</div>
                     <div><button onClick={deleteBlog} >Delete</button></div>
                 </>
