@@ -186,7 +186,6 @@ const App = () => {
             <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef} >
                 <CreateBlog createBlog={createNewBlog}/>
             </Toggleable>
-            
             {/* Show blogs */}
             {blogs.map((blog) => (
                 <Blog key={blog.id} blog={blog} handleLikeUpdate={updateLikes} handleDelete={deleteBlog}/>
