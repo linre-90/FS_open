@@ -8,7 +8,7 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     const updateDisplay = () => {
         setDisplay(!display);
     };
-    
+
     // Send updated blog to server and update state after.
     const update = async() => {
         setUpdatingLikes(true);
@@ -20,14 +20,14 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             setBlogState(responseBlog);
             setUpdatingLikes(false);
         }
-    }
+    };
 
     // Handles delete
     const deleteBlog = () => {
         if(window.confirm(`Remove blog ${blogState.title} by ${blogState.author}`)){
             handleDelete(blogState.id);
         }
-    }
+    };
 
     // Mark initial render to be complete
     useEffect(() => {

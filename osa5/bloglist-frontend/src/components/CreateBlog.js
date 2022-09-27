@@ -1,7 +1,7 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 import PropTypes from "prop-types";
 
-const CreateBlog = ({createBlog}) => {
+const CreateBlog = ({ createBlog }) => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [url, setUrl] = useState("");
@@ -9,7 +9,7 @@ const CreateBlog = ({createBlog}) => {
     // Post new blog
     const createNewBlog = async (event) => {
         event.preventDefault();
-        const newBlog = {title, url, author }
+        const newBlog = { title, url, author };
         setTitle("");
         setAuthor("");
         setUrl("");
@@ -48,7 +48,7 @@ const CreateBlog = ({createBlog}) => {
 };
 
 CreateBlog.propTypes = {
-    createBlog: PropTypes.func.isRequired 
-}
+    createBlog: PropTypes.func.isRequired,
+};
 
-export { CreateBlog }
+export { CreateBlog };

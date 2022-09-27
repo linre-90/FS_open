@@ -77,13 +77,13 @@ const App = () => {
                 setErrorMessage(null);
             }, 5000);
         }
-    }
+    };
 
     const deleteBlog = async(blogid) => {
         try {
             const response = await blogService.deleteBlog(blogid);
             setMessage(
-                `A blog deleted succesfully`
+                "A blog deleted succesfully"
             );
             setTimeout(() => {
                 setMessage(null);
@@ -96,7 +96,7 @@ const App = () => {
                 setErrorMessage(null);
             }, 5000);
         }
-    }
+    };
 
     const logout = () => {
         window.localStorage.clear();
@@ -113,12 +113,12 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        blogService.getAll().then((blogs) =>{
+        blogService.getAll().then((blogs) => {
             // Sort blogs based on likes top -> bottom
-            const sorted = blogs.sort((a,b) => { 
+            const sorted = blogs.sort((a,b) => {
                 if(a.likes < b.likes){
                     return 1;
-                } 
+                }
                 if(a.likes > b.likes){
                     return -1;
                 }

@@ -3,16 +3,17 @@ import React from "react";
 /**
  * Component to display application state for user.
  * Success messages or error messages.
- * @param {*} param0 
+ * @param {*} param0
  */
-const Message = ({message, panic}) =>{
+const Message = ({ message, panic }) => {
     // normal style
     let style = {
-        color: "green", 
-        border: "1px solid green", 
-        backgroundColor: "rgba(201, 76, 76, 0.3)", 
-        padding: "10px", 
-        borderRadius: "10px"};
+        color: "green",
+        border: "1px solid green",
+        backgroundColor: "rgba(201, 76, 76, 0.3)",
+        padding: "10px",
+        borderRadius: "10px"
+    };
 
     // Error style overwrite
     if(panic){
@@ -21,9 +22,9 @@ const Message = ({message, panic}) =>{
     }
 
     return(
-        <h2 style={style}>{message}</h2>    
+        <h2 style={style}>{message}</h2>
     );
-}
+};
 
 
-export { Message }
+export { Message };
