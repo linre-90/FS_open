@@ -3,3 +3,5 @@ node_modules
 .env.*
 osa5/blog-backend/*
 !osa5/blog-backend/README.md
+osa5/bloglist-frontend/cypress/videos
+osa5/bloglist-frontend/cypress/screenshots
