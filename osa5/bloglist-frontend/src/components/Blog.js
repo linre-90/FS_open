@@ -28,8 +28,8 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
 
     // Mark initial render to be complete
     useEffect(() => {
-        if(!blogState.likes){
-            let newBlogObj = blogState;
+        if(!blog.likes){
+            let newBlogObj = blog;
             newBlogObj.likes = 0;
             setBlogState(newBlogObj);
         }
@@ -45,7 +45,7 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     };
 
     return (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle}>
             <div>
                 {blogState.title} {blogState.author}
                 {display ? (
@@ -57,7 +57,7 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             {display ? (
                 <>
                     <div>{blogState.url}</div>
-                    <div>likes: {blogState.likes}<button onClick={update} >Like</button></div>
+                    <div>likes: {blogState.likes ? blogState.likes : 0}<button onClick={update} >Like</button></div>
                     <div>{blogState.author}</div>
                     <div><button onClick={deleteBlog} >Delete</button></div>
                 </>

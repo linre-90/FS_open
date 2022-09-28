@@ -44,7 +44,7 @@ const App = () => {
         newBlogRef.current.toggleVisibility();
         try {
             const response = await blogService.create(blog);
-            updateBlogList();
+            await updateBlogList();
             setMessage(
                 `A new blog ${response.title} by ${response.author} added`
             );
@@ -64,6 +64,7 @@ const App = () => {
     const updateLikes = async (blog) => {
         try {
             const response = await blogService.update(blog);
+            await updateBlogList();
             setMessage(
                 `A blog ${response.title} by ${response.author} updated`
             );
@@ -83,7 +84,7 @@ const App = () => {
     const deleteBlog = async(blogid) => {
         try {
             const response = await blogService.deleteBlog(blogid);
-            updateBlogList();
+            await updateBlogList();
             setMessage(
                 "A blog deleted succesfully"
             );
@@ -105,20 +106,22 @@ const App = () => {
         window.location.href = "/";
     };
 
-    const updateBlogList = () => {
-        blogService.getAll().then((blogs) => {
-            // Sort blogs based on likes top -> bottom
-            const sorted = blogs.sort((a,b) => {
-                if(a.likes < b.likes){
-                    return 1;
-                }
-                if(a.likes > b.likes){
-                    return -1;
-                }
-                return 0;
-            });
-            setBlogs(sorted);
+    const sortBlogs = (blogs) => {
+        const sorted = blogs.sort((a,b) => {
+            if(a.likes < b.likes || a.likes === undefined ){
+                return 1;
+            }
+            if(b.likes < a.likes || b.likes === undefined){
+                return -1;
+            }
+            return 0;
         });
+        return sorted;
+    };
+
+    const updateBlogList = async () => {
+        const blogs = await blogService.getAll();
+        setBlogs(sortBlogs(blogs));
     };
 
     useEffect(() => {

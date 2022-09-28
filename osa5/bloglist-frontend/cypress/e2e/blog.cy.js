@@ -56,30 +56,46 @@ describe("Blog app", function () {
             cy.contains("Cypress hill, the band! Cypress Hill");
         });
 
-        it("blog can be liked", function () {
-            cy.contains("Create new blog").click();
-            cy.get("#title").type("Cypress hill, the band!");
-            cy.get("#author").type("Cypress Hill");
-            cy.get("#url").type("/asdasd");
-            cy.get("#submitBlog").click();
-            cy.contains("View").click();
-            cy.contains("likes: 0");
-            cy.contains("Like").click();
-            cy.contains("likes: 1");
-            cy.contains("Like").click();
-            cy.contains("likes: 2");
-        });
+        describe("blog functionality", function () {
+            beforeEach(function () {
+                cy.createBlog({
+                    title: "Top likes",
+                    author: "Cypress Hill",
+                    url: "/1",
+                });
 
-        it("blog can be deleted by creator", function () {
-            cy.contains("Create new blog").click();
-            cy.get("#title").type("Cypress hill, the band!");
-            cy.get("#author").type("Cypress Hill");
-            cy.get("#url").type("/asdasd");
-            cy.get("#submitBlog").click();
-            cy.contains("View").click();
-            cy.contains("Delete").click();
-            cy.get("html").should("not.contain", "Cypress hill, the band! Cypress Hill");
+                cy.createBlog({
+                    title: "Bad posting",
+                    author: "Cypress Hill",
+                    url: "/2",
+                });
+            });
 
+            it("blog can be liked", function () {
+                cy.get(".blog").eq(0).contains("View").click();
+                cy.contains("Like").click();
+                cy.contains("likes: 1");
+            });
+
+            it("blog can be deleted by creator", function () {
+                cy.get(".blog").eq(0).contains("View").click();
+                cy.contains("Delete").click();
+                cy.get("html").should("not.contain", "Top likes Cypress Hill");
+            });
+
+            it("bloglist is ordered by likes", function () {
+                cy.contains("Bad posting Cypress Hill").contains("View").click();
+                cy.contains("Like").click();
+                cy.contains("likes: 1");
+                cy.contains("Like").click();
+
+                cy.get(".blog")
+                    .eq(0)
+                    .should("contain", "Bad posting Cypress Hill");
+                cy.get(".blog")
+                    .eq(1)
+                    .should("contain", "Top likes Cypress Hill");
+            });
         });
     });
 });
