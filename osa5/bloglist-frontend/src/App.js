@@ -44,6 +44,7 @@ const App = () => {
         newBlogRef.current.toggleVisibility();
         try {
             const response = await blogService.create(blog);
+            updateBlogList();
             setMessage(
                 `A new blog ${response.title} by ${response.author} added`
             );
@@ -82,6 +83,7 @@ const App = () => {
     const deleteBlog = async(blogid) => {
         try {
             const response = await blogService.deleteBlog(blogid);
+            updateBlogList();
             setMessage(
                 "A blog deleted succesfully"
             );
@@ -103,16 +105,7 @@ const App = () => {
         window.location.href = "/";
     };
 
-    useEffect(() => {
-        const loggedInUser = window.localStorage.getItem("bloguser");
-        if (loggedInUser) {
-            const user = JSON.parse(loggedInUser);
-            setUser(user);
-            blogService.setToken(user.token);
-        }
-    }, []);
-
-    useEffect(() => {
+    const updateBlogList = () => {
         blogService.getAll().then((blogs) => {
             // Sort blogs based on likes top -> bottom
             const sorted = blogs.sort((a,b) => {
@@ -126,6 +119,20 @@ const App = () => {
             });
             setBlogs(sorted);
         });
+    };
+
+    useEffect(() => {
+        const loggedInUser = window.localStorage.getItem("bloguser");
+        if (loggedInUser) {
+            const user = JSON.parse(loggedInUser);
+            setUser(user);
+            blogService.setToken(user.token);
+        }
+    }, []);
+
+    // Initial data fetch
+    useEffect(() => {
+        updateBlogList();
     }, []);
 
     if (user === null) {

@@ -36,7 +36,6 @@ describe("Blog app", function () {
         });
     });
 
-    /*
     describe("When logged in", function () {
         beforeEach(function(){
             cy.request("POST", "http://localhost:3003/api/login", {
@@ -48,14 +47,14 @@ describe("Blog app", function () {
             });
         });
 
-        it("succeeds with correct credentials", function () {
-            cy.get("#username").type("testUser");
-            cy.get("#password").type("salainen");
-            cy.get("#loginBtn").click();
-        });
+        it("new blog gets created", function(){
+            cy.contains("Create new blog").click();
+            cy.get("#title").type("Cypress hill, the band!");
+            cy.get("#author").type("Cypress Hill");
+            cy.get("#url").type("/asdasd");
+            cy.get("#submitBlog").click();
+            cy.contains("Cypress hill, the band! Cypress Hill");
 
-        it("fails with wrong credentials", function () {
-            // ...
         });
-    });*/
+    });
 });
