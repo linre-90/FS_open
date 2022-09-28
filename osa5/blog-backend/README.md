@@ -1,3 +1,3 @@
-# Info about this folder
+# Blog listing app backend.
 
-This folder contains part 4 example submission. Used it for part 5 as suggested. How ever i did not want to commit solution to github and decided to leave it out.
+Decided to commit this folder after all because made required changes and file additions.
