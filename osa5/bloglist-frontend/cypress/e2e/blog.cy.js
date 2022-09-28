@@ -56,7 +56,7 @@ describe("Blog app", function () {
             cy.contains("Cypress hill, the band! Cypress Hill");
         });
 
-        it.only("blog can be liked", function () {
+        it("blog can be liked", function () {
             cy.contains("Create new blog").click();
             cy.get("#title").type("Cypress hill, the band!");
             cy.get("#author").type("Cypress Hill");
@@ -68,6 +68,18 @@ describe("Blog app", function () {
             cy.contains("likes: 1");
             cy.contains("Like").click();
             cy.contains("likes: 2");
+        });
+
+        it("blog can be deleted by creator", function () {
+            cy.contains("Create new blog").click();
+            cy.get("#title").type("Cypress hill, the band!");
+            cy.get("#author").type("Cypress Hill");
+            cy.get("#url").type("/asdasd");
+            cy.get("#submitBlog").click();
+            cy.contains("View").click();
+            cy.contains("Delete").click();
+            cy.get("html").should("not.contain", "Cypress hill, the band! Cypress Hill");
+
         });
     });
 });
