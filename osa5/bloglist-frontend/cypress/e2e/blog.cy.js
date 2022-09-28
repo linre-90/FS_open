@@ -37,7 +37,7 @@ describe("Blog app", function () {
     });
 
     describe("When logged in", function () {
-        beforeEach(function(){
+        beforeEach(function () {
             cy.request("POST", "http://localhost:3003/api/login", {
                 username: "testUser",
                 password: "test",
@@ -47,14 +47,27 @@ describe("Blog app", function () {
             });
         });
 
-        it("new blog gets created", function(){
+        it("new blog gets created", function () {
             cy.contains("Create new blog").click();
             cy.get("#title").type("Cypress hill, the band!");
             cy.get("#author").type("Cypress Hill");
             cy.get("#url").type("/asdasd");
             cy.get("#submitBlog").click();
             cy.contains("Cypress hill, the band! Cypress Hill");
+        });
 
+        it.only("blog can be liked", function () {
+            cy.contains("Create new blog").click();
+            cy.get("#title").type("Cypress hill, the band!");
+            cy.get("#author").type("Cypress Hill");
+            cy.get("#url").type("/asdasd");
+            cy.get("#submitBlog").click();
+            cy.contains("View").click();
+            cy.contains("likes: 0");
+            cy.contains("Like").click();
+            cy.contains("likes: 1");
+            cy.contains("Like").click();
+            cy.contains("likes: 2");
         });
     });
 });
