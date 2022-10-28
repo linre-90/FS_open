@@ -20,7 +20,8 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+const initialState = anecdotesAtStart.map(asObject);
+const initialNotification = "";
 
 const anecdoteSlice = createSlice({
   name: "anecdotes",
@@ -35,7 +36,6 @@ const anecdoteSlice = createSlice({
       });
     },
     addAnecdote(state, action){
-      console.log(state);
       return [...state, {
         content: action.payload,
         id: getId(),
@@ -45,5 +45,34 @@ const anecdoteSlice = createSlice({
   }
 });
 
+const notificationSlice = createSlice({
+  name: "notification",
+  initialState: initialNotification,
+  reducers: {
+    setNotification(state, action){
+      return action.payload;
+    },
+    removeNotification(state){
+      return "";
+    }
+  }
+});
+
+const filterSlice = createSlice({
+  name: "filter",
+  initialState: initialNotification,
+  reducers: {
+    setFilter(state, action){
+      return action.payload;
+    },
+  }
+});
+
+// export actions
 export const { voteAnecdote, addAnecdote } = anecdoteSlice.actions;
-export default anecdoteSlice.reducer
+export const { setNotification, removeNotification } = notificationSlice.actions;
+export const { setFilter } = filterSlice.actions;
+// export reducers
+export const anecdoreReducer = anecdoteSlice.reducer;
+export const notificationReducer = notificationSlice.reducer;
+export const filterReducer = filterSlice.reducer;
