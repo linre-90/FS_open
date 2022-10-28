@@ -1,6 +1,5 @@
 import { configureStore, combineReducers  } from '@reduxjs/toolkit'
-import {anecdoreReducer, notificationReducer, filterReducer} from './reducers/anecdoteReducer';
-
+import {anecdoreReducer, notificationReducer, filterReducer, setAnecdotes} from './reducers/anecdoteReducer';
 
 const reducer = combineReducers({
     anecdotes: anecdoreReducer,

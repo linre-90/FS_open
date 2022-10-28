@@ -1,47 +1,58 @@
 import { createSlice } from '@reduxjs/toolkit'
+import anecdoteService from "../services/anecdotes";
 
 
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
+const initialNotification = "";
 
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll();
+    dispatch(setAnecdotes(anecdotes));
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject);
-const initialNotification = "";
+export const createAnecdote = content => {
+  return async dispatch => {
+    const anecdote = await anecdoteService.createNew(content);
+    dispatch(addAnecdote(anecdote));
+  }
+}
+
+export const voteAnecdoteAsync = content => {
+  return async dispatch => {
+    const anecdote = await anecdoteService.updateAnecdote(content);
+    dispatch(voteAnecdote(anecdote));
+  }
+}
+
+export const setNotificationWithTimer = (content, time) => {
+  return async dispatch => {
+    dispatch(setNotification(content));
+    setTimeout(() => {dispatch(removeNotification())}, time * 1000);
+  }
+}
+
 
 const anecdoteSlice = createSlice({
   name: "anecdotes",
-  initialState,
+  initialState: [],
   reducers: {
     voteAnecdote(state, action){
       state.map(x => {
-        if(x.id === action.payload){
+        if(x.id === action.payload.id){
             x.votes += 1;
         }
         return x;
+        
       });
+      return state;
     },
     addAnecdote(state, action){
-      return [...state, {
-        content: action.payload,
-        id: getId(),
-        votes: 0
-      }]
-    }
+      return [...state, action.payload];
+    },
+    setAnecdotes(state, action) {
+      return action.payload;
+    },
   }
 });
 
@@ -50,6 +61,7 @@ const notificationSlice = createSlice({
   initialState: initialNotification,
   reducers: {
     setNotification(state, action){
+      console.log(action);
       return action.payload;
     },
     removeNotification(state){
@@ -69,7 +81,7 @@ const filterSlice = createSlice({
 });
 
 // export actions
-export const { voteAnecdote, addAnecdote } = anecdoteSlice.actions;
+export const { voteAnecdote, addAnecdote, setAnecdotes } = anecdoteSlice.actions;
 export const { setNotification, removeNotification } = notificationSlice.actions;
 export const { setFilter } = filterSlice.actions;
 // export reducers
