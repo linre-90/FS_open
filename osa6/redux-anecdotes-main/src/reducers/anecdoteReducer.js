@@ -3,6 +3,7 @@ import anecdoteService from "../services/anecdotes";
 
 
 const initialNotification = "";
+let timeoutID;
 
 export const initializeAnecdotes = () => {
   return async dispatch => {
@@ -28,7 +29,8 @@ export const voteAnecdoteAsync = content => {
 export const setNotificationWithTimer = (content, time) => {
   return async dispatch => {
     dispatch(setNotification(content));
-    setTimeout(() => {dispatch(removeNotification())}, time * 1000);
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {dispatch(removeNotification())}, time * 1000);
   }
 }
 
@@ -61,7 +63,6 @@ const notificationSlice = createSlice({
   initialState: initialNotification,
   reducers: {
     setNotification(state, action){
-      console.log(action);
       return action.payload;
     },
     removeNotification(state){
