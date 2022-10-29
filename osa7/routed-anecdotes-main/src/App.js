@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Routes, Route, Link, useParams } from "react-router-dom"
 
 const Menu = () => {
   const padding = {
@@ -6,9 +7,9 @@ const Menu = () => {
   }
   return (
     <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
+      <Link to='/' style={padding}>anecdotes</Link>
+      <Link to='/create' style={padding}>create new</Link>
+      <Link to='/about' style={padding}>about</Link>
     </div>
   )
 }
@@ -17,7 +18,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id}><Link to={`/anecdote/${anecdote.id}`} key={anecdote.id} >{anecdote.content}</Link></li>)}
     </ul>
   </div>
 )
@@ -83,6 +84,21 @@ const CreateNew = (props) => {
 
 }
 
+
+const AnecdoteSingle = ({anecdotes}) => {
+  const id = useParams().id;
+  const anecdote = anecdotes.find(a => a.id === parseInt(id));
+
+  console.log(anecdote);
+  return(
+    <div>
+      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+    </div>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -123,14 +139,19 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Software anecdotes</h1>
-      <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
-      <Footer />
-    </div>
+      <div>
+        <h1>Software anecdotes</h1>
+        <Menu />
+        
+        <Routes>
+          <Route path="/anecdote/:id" element={<AnecdoteSingle anecdotes={anecdotes} />} />
+          <Route path='/create' element={<CreateNew addNew={addNew} />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
+        </Routes>
+
+        <Footer />
+      </div>
   )
 }
 
