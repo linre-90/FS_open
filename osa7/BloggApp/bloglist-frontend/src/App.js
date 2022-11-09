@@ -1,29 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
+import React, { useState, useEffect } from "react";
 import blogService from "./services/blogs";
 import loginservice from "./services/login";
 import { Message } from "./components/Message";
-import { CreateBlog } from "./components/CreateBlog";
-import { Toggleable } from "./components/Toggleable";
+import Navbar from "./components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotificationWithTimer } from "./reducers/messageReducer";
 import { setUser } from "./reducers/userReducer";
-import {
-    initializeBlogs,
-    createNewBlogDispatch,
-    updateLikesDispatch,
-    deleteBlogDispatch,
-} from "./reducers/blogReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// Pages
+import Home from "./Home";
+import Users from "./Users";
 
 const App = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const newBlogRef = useRef();
     const dispatch = useDispatch();
     // notification
     const message = useSelector((state) => state.message);
-    //blog
-    const blogsStore = useSelector((state) => state.blog);
     // user
     const reduxUser = useSelector((state) => state.user);
 
@@ -55,51 +49,6 @@ const App = () => {
             window.localStorage.setItem("bloguser", JSON.stringify(user));
         } catch (error) {
             dispatch(setNotificationWithTimer("Wrong credentials", true));
-        }
-    };
-
-    // Post new blog
-    const createNewBlog = async (blog) => {
-        newBlogRef.current.toggleVisibility();
-        try {
-            dispatch(createNewBlogDispatch(blog));
-            dispatch(
-                setNotificationWithTimer(
-                    `A new blog ${blog.title} by ${blog.author} added`,
-                    false
-                )
-            );
-        } catch (error) {
-            setNotificationWithTimer("Adding blog failed", true);
-        }
-    };
-
-    // Update likes
-    const updateLikes = async (blog) => {
-        try {
-            let updatedBlog = { ...blog };
-            updatedBlog.likes += 1;
-            updatedBlog.user = blog.user.id;
-            dispatch(updateLikesDispatch(updatedBlog));
-            dispatch(
-                setNotificationWithTimer(
-                    `A blog ${blog.title} by ${blog.author} updated`,
-                    false
-                )
-            );
-        } catch (error) {
-            dispatch(setNotificationWithTimer("updating blog failed", true));
-        }
-    };
-
-    const deleteBlog = async (blogid) => {
-        try {
-            dispatch(deleteBlogDispatch(blogid));
-            dispatch(
-                setNotificationWithTimer("A blog deleted succesfully", false)
-            );
-        } catch (error) {
-            dispatch(setNotificationWithTimer("Deleting blog failed", true));
         }
     };
 
@@ -146,33 +95,24 @@ const App = () => {
     }
 
     return (
-        <div>
+        <Router>
             {/* Notification */}
-            <h2>blogs</h2>
+            <h1>Blogs</h1>
+            <Navbar />
 
+            <p>
+                {reduxUser.name} logged in <br></br>
+                <button onClick={logout}>logout</button>
+            </p>
             {/* Notification */}
             {message.message !== null && (
                 <Message message={message.message} panic={message.panic} />
             )}
-
-            <p>
-                {reduxUser.name} logged in
-                <button onClick={logout}>logout</button>
-            </p>
-
-            <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef}>
-                <CreateBlog createBlog={createNewBlog} />
-            </Toggleable>
-            {/* Show blogs */}
-            {blogsStore.map((blog) => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    handleLikeUpdate={updateLikes}
-                    handleDelete={deleteBlog}
-                />
-            ))}
-        </div>
+            <Routes>
+                <Route path="/users" element={<Users />}></Route>
+                <Route path="/" element={<Home />}></Route>
+            </Routes>
+        </Router>
     );
 };
 
