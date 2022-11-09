@@ -15,11 +15,11 @@ router.get("/", async (request, response) => {
 
 router.post("/", async (request, response) => {
     const { username, name, password } = request.body;
-
+    console.log(request.body);
     if (!password || password.length < 3) {
         return response.status(400).json({
             error: "invalid password",
-        });
+        })
     }
 
     const existingUser = await User.findOne({ username });

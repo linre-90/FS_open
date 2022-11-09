@@ -7,4 +7,4 @@ const login = async (userdata) => {
     return response.data;
 };
 
-export default{ login };
+export default { login };

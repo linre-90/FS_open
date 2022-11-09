@@ -9,36 +9,40 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     };
 
     // Send updated blog to server and update state after.
-    const update = async() => {
+    const update = async () => {
         let updatedBlog = blogState;
         updatedBlog.likes = blogState.likes + 1;
         updatedBlog.user = blogState.user.id;
         const responseBlog = await handleLikeUpdate(updatedBlog);
-        if(responseBlog){
+        if (responseBlog) {
             setBlogState(responseBlog);
         }
     };
 
     // Handles delete
     const deleteBlog = () => {
-        if(window.confirm(`Remove blog ${blogState.title} by ${blogState.author}`)){
+        if (
+            window.confirm(
+                `Remove blog ${blogState.title} by ${blogState.author}`
+            )
+        ) {
             handleDelete(blogState.id);
         }
     };
 
     // Mark initial render to be complete
     useEffect(() => {
-        if(!blog.likes){
+        if (!blog.likes) {
             let newBlogObj = blog;
             newBlogObj.likes = 0;
             setBlogState(newBlogObj);
         }
-    },[]);
+    }, []);
 
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
-        paddingBottom:10,
+        paddingBottom: 10,
         border: "solid",
         borderWidth: 1,
         marginBottom: 5,
@@ -57,9 +61,14 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             {display ? (
                 <>
                     <div>{blogState.url}</div>
-                    <div>likes: {blogState.likes ? blogState.likes : 0}<button onClick={update} >Like</button></div>
+                    <div>
+                        likes: {blogState.likes ? blogState.likes : 0}
+                        <button onClick={update}>Like</button>
+                    </div>
                     <div>{blogState.author}</div>
-                    <div><button onClick={deleteBlog} >Delete</button></div>
+                    <div>
+                        <button onClick={deleteBlog}>Delete</button>
+                    </div>
                 </>
             ) : (
                 <></>

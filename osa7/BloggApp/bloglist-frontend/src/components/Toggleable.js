@@ -1,4 +1,4 @@
-import { useState, React , forwardRef, useImperativeHandle } from "react";
+import { useState, React, forwardRef, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
  * @returns
  */
 const Toggleable = forwardRef((props, refs) => {
-
     const [visible, setVisible] = useState(false);
 
     const hideWhenVisible = { display: visible ? "none" : "" };
@@ -19,7 +18,7 @@ const Toggleable = forwardRef((props, refs) => {
 
     useImperativeHandle(refs, () => {
         return {
-            toggleVisibility
+            toggleVisibility,
         };
     });
 
@@ -41,6 +40,5 @@ Toggleable.propTypes = {
 };
 
 Toggleable.displayName = "Toggleable";
-
 
 export { Toggleable };

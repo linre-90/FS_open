@@ -12,19 +12,16 @@ const Message = ({ message, panic }) => {
         border: "1px solid green",
         backgroundColor: "rgba(201, 76, 76, 0.3)",
         padding: "10px",
-        borderRadius: "10px"
+        borderRadius: "10px",
     };
 
     // Error style overwrite
-    if(panic){
+    if (panic) {
         style.color = "red";
         style.border = "1px solid red";
     }
 
-    return(
-        <h2 style={style}>{message}</h2>
-    );
+    return <h2 style={style}>{message}</h2>;
 };
-
 
 export { Message };

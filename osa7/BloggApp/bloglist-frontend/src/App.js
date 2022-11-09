@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginservice from "./services/login";
 import { Message } from "./components/Message";
 import { CreateBlog } from "./components/CreateBlog";
 import { Toggleable } from "./components/Toggleable";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessage } from "./reducers/messageReducer";
+
+let timer;
 
 const App = () => {
     const [blogs, setBlogs] = useState([]);
@@ -14,8 +18,9 @@ const App = () => {
     const newBlogRef = useRef();
 
     // notification
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [message, setMessage] = useState(null);
+    //const [message, setMessage] = useState(null);
+    const message = useSelector((state) => state.message);
+    const dispatch = useDispatch();
 
     // Handle login btn press.
     const handleLogin = async (event) => {
@@ -31,10 +36,10 @@ const App = () => {
             // save user to local storage
             window.localStorage.setItem("bloguser", JSON.stringify(user));
         } catch (error) {
-            //console.log(error);
-            setErrorMessage("Wrong credentials");
-            setTimeout(() => {
-                setErrorMessage(null);
+            dispatch(setMessage(["Wrong credentials", true]));
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
         }
     };
@@ -45,17 +50,21 @@ const App = () => {
         try {
             const response = await blogService.create(blog);
             await updateBlogList();
-            setMessage(
-                `A new blog ${response.title} by ${response.author} added`
+            dispatch(
+                setMessage([
+                    `A new blog ${response.title} by ${response.author} added`,
+                    false,
+                ])
             );
-            setTimeout(() => {
-                setMessage(null);
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
         } catch (error) {
-            //console.log(error);
-            setErrorMessage("Adding blog failed");
-            setTimeout(() => {
-                setErrorMessage(null);
+            clearTimeout(timer);
+            setMessage(["Adding blog failed", true]);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
         }
     };
@@ -65,38 +74,41 @@ const App = () => {
         try {
             const response = await blogService.update(blog);
             await updateBlogList();
-            setMessage(
-                `A blog ${response.title} by ${response.author} updated`
+            dispatch(
+                setMessage([
+                    `A blog ${response.title} by ${response.author} updated`,
+                    false,
+                ])
             );
-            setTimeout(() => {
-                setMessage(null);
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
             return response;
         } catch (error) {
-            //console.log(error);
-            setErrorMessage("Adding blog failed");
-            setTimeout(() => {
-                setErrorMessage(null);
+            dispatch(setMessage(["Adding blog failed", true]));
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
         }
     };
 
-    const deleteBlog = async(blogid) => {
+    const deleteBlog = async (blogid) => {
         try {
             const response = await blogService.deleteBlog(blogid);
             await updateBlogList();
-            setMessage(
-                "A blog deleted succesfully"
-            );
-            setTimeout(() => {
-                setMessage(null);
+            dispatch(setMessage(["A blog deleted succesfully", false]));
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
             return response;
         } catch (error) {
-            console.log(error);
-            setErrorMessage("Deleting blog failed");
-            setTimeout(() => {
-                setErrorMessage(null);
+            dispatch(setMessage(["Deleting blog failed", true]));
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                dispatch(setMessage([null, false]));
             }, 5000);
         }
     };
@@ -107,11 +119,11 @@ const App = () => {
     };
 
     const sortBlogs = (blogs) => {
-        const sorted = blogs.sort((a,b) => {
-            if(a.likes < b.likes || a.likes === undefined ){
+        const sorted = blogs.sort((a, b) => {
+            if (a.likes < b.likes || a.likes === undefined) {
                 return 1;
             }
-            if(b.likes < a.likes || b.likes === undefined){
+            if (b.likes < a.likes || b.likes === undefined) {
                 return -1;
             }
             return 0;
@@ -143,12 +155,9 @@ const App = () => {
             <div>
                 <h1>Log in to application</h1>
                 {/* Notification */}
-                {errorMessage !== null && (
-                    <Message message={errorMessage} panic={true} />
-                )}
 
-                {message !== null && (
-                    <Message message={message} panic={false} />
+                {message.message !== null && (
+                    <Message message={message.message} panic={message.panic} />
                 )}
 
                 <form onSubmit={handleLogin}>
@@ -170,7 +179,9 @@ const App = () => {
                             onChange={({ target }) => setPassword(target.value)}
                         />
                     </div>
-                    <button id="loginBtn" type="submit">login</button>
+                    <button id="loginBtn" type="submit">
+                        login
+                    </button>
                 </form>
             </div>
         );
@@ -182,23 +193,25 @@ const App = () => {
             <h2>blogs</h2>
 
             {/* Notification */}
-            {errorMessage !== null && (
-                <Message message={errorMessage} panic={true} />
+            {message.message !== null && (
+                <Message message={message.message} panic={message.panic} />
             )}
-
-            {message !== null && <Message message={message} panic={false} />}
 
             <p>
                 {user.name} logged in <button onClick={logout}>logout</button>
             </p>
 
-
-            <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef} >
-                <CreateBlog createBlog={createNewBlog}/>
+            <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef}>
+                <CreateBlog createBlog={createNewBlog} />
             </Toggleable>
             {/* Show blogs */}
             {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} handleLikeUpdate={updateLikes} handleDelete={deleteBlog}/>
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    handleLikeUpdate={updateLikes}
+                    handleDelete={deleteBlog}
+                />
             ))}
         </div>
     );
