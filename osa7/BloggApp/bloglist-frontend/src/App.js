@@ -7,6 +7,7 @@ import { CreateBlog } from "./components/CreateBlog";
 import { Toggleable } from "./components/Toggleable";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "./reducers/messageReducer";
+import { setUser } from "./reducers/userReducer";
 import {
     initializeBlogs,
     createNewBlogDispatch,
@@ -18,21 +19,21 @@ let timer;
 const App = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [user, setUser] = useState(null);
     const newBlogRef = useRef();
-
-    const blogsStore = useSelector((state) => state.blog);
-
+    const dispatch = useDispatch();
     // notification
     const message = useSelector((state) => state.message);
-    const dispatch = useDispatch();
+    //blog
+    const blogsStore = useSelector((state) => state.blog);
+    // user
+    const reduxUser = useSelector((state) => state.user);
 
     useEffect(() => {
         const loggedInUser = window.localStorage.getItem("bloguser");
         if (loggedInUser) {
             const user = JSON.parse(loggedInUser);
-            setUser(user);
             blogService.setToken(user.token);
+            dispatch(setUser(user));
         }
     }, []);
 
@@ -46,7 +47,7 @@ const App = () => {
 
         try {
             const user = await loginservice.login({ username, password });
-            setUser(user);
+            dispatch(setUser(user));
             setUsername("");
             setPassword("");
             blogService.setToken(user.token);
@@ -163,7 +164,7 @@ const App = () => {
         sortBlogs(blogs); //TODO update blog list
     };
 */
-    if (user === null) {
+    if (reduxUser === null) {
         return (
             <div>
                 <h1>Log in to application</h1>
@@ -211,7 +212,8 @@ const App = () => {
             )}
 
             <p>
-                {user.name} logged in <button onClick={logout}>logout</button>
+                {reduxUser.name} logged in
+                <button onClick={logout}>logout</button>
             </p>
 
             <Toggleable buttonLabel={"Create new blog"} ref={newBlogRef}>
