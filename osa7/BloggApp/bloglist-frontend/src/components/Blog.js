@@ -1,17 +1,19 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 
 const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     const [display, setDisplay] = useState(false);
-    const [blogState /*, setBlogState*/] = useState(blog);
+    const [blogState, setBlogState] = useState(blog);
+
+    useEffect(() => {
+        setBlogState(blog);
+    }, [blog]);
 
     const updateDisplay = () => {
         setDisplay(!display);
     };
 
     // Send updated blog to server and update state after.
-    const update = () => {
-        handleLikeUpdate(blog);
-    };
+    const update = () => handleLikeUpdate(blog);
 
     // Handles delete
     const deleteBlog = () => {

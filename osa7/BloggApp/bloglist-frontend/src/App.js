@@ -11,6 +11,7 @@ import {
     initializeBlogs,
     createNewBlogDispatch,
     updateLikesDispatch,
+    deleteBlogDispatch,
 } from "./reducers/blogReducer";
 let timer;
 
@@ -97,13 +98,11 @@ const App = () => {
         try {
             let updatedBlog = { ...blog };
             updatedBlog.likes += 1;
+            updatedBlog.user = blog.user.id;
             dispatch(updateLikesDispatch(updatedBlog));
-            /*
-            const response = await blogService.update(blog);
-            await updateBlogList();
             dispatch(
                 setMessage([
-                    `A blog ${response.title} by ${response.author} updated`,
+                    `A blog ${blog.title} by ${blog.author} updated`,
                     false,
                 ])
             );
@@ -111,7 +110,6 @@ const App = () => {
             timer = setTimeout(() => {
                 dispatch(setMessage([null, false]));
             }, 5000);
-            return response;*/
         } catch (error) {
             dispatch(setMessage(["updating blog failed", true]));
             clearTimeout(timer);
@@ -123,6 +121,8 @@ const App = () => {
 
     const deleteBlog = async (blogid) => {
         try {
+            dispatch(deleteBlogDispatch(blogid));
+            /*
             const response = await blogService.deleteBlog(blogid);
             await updateBlogList();
             dispatch(setMessage(["A blog deleted succesfully", false]));
@@ -130,7 +130,7 @@ const App = () => {
             timer = setTimeout(() => {
                 dispatch(setMessage([null, false]));
             }, 5000);
-            return response;
+            return response;*/
         } catch (error) {
             dispatch(setMessage(["Deleting blog failed", true]));
             clearTimeout(timer);
@@ -144,7 +144,7 @@ const App = () => {
         window.localStorage.clear();
         window.location.href = "/";
     };
-
+    /*
     const sortBlogs = (blogs) => {
         const sorted = blogs.sort((a, b) => {
             if (a.likes < b.likes || a.likes === undefined) {
@@ -157,12 +157,12 @@ const App = () => {
         });
         return sorted;
     };
-
+    
     const updateBlogList = async () => {
         const blogs = await blogService.getAll();
         sortBlogs(blogs); //TODO update blog list
     };
-
+*/
     if (user === null) {
         return (
             <div>
