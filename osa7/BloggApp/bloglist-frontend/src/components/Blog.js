@@ -1,22 +1,16 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 
 const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
     const [display, setDisplay] = useState(false);
-    const [blogState, setBlogState] = useState(blog);
+    const [blogState /*, setBlogState*/] = useState(blog);
 
     const updateDisplay = () => {
         setDisplay(!display);
     };
 
     // Send updated blog to server and update state after.
-    const update = async () => {
-        let updatedBlog = blogState;
-        updatedBlog.likes = blogState.likes + 1;
-        updatedBlog.user = blogState.user.id;
-        const responseBlog = await handleLikeUpdate(updatedBlog);
-        if (responseBlog) {
-            setBlogState(responseBlog);
-        }
+    const update = () => {
+        handleLikeUpdate(blog);
     };
 
     // Handles delete
@@ -29,15 +23,6 @@ const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
             handleDelete(blogState.id);
         }
     };
-
-    // Mark initial render to be complete
-    useEffect(() => {
-        if (!blog.likes) {
-            let newBlogObj = blog;
-            newBlogObj.likes = 0;
-            setBlogState(newBlogObj);
-        }
-    }, []);
 
     const blogStyle = {
         paddingTop: 10,

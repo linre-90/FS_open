@@ -7,20 +7,37 @@ import { CreateBlog } from "./components/CreateBlog";
 import { Toggleable } from "./components/Toggleable";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "./reducers/messageReducer";
-
+import {
+    initializeBlogs,
+    createNewBlogDispatch,
+    updateLikesDispatch,
+} from "./reducers/blogReducer";
 let timer;
 
 const App = () => {
-    const [blogs, setBlogs] = useState([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState(null);
     const newBlogRef = useRef();
 
+    const blogsStore = useSelector((state) => state.blog);
+
     // notification
-    //const [message, setMessage] = useState(null);
     const message = useSelector((state) => state.message);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const loggedInUser = window.localStorage.getItem("bloguser");
+        if (loggedInUser) {
+            const user = JSON.parse(loggedInUser);
+            setUser(user);
+            blogService.setToken(user.token);
+        }
+    }, []);
+
+    useEffect(() => {
+        dispatch(initializeBlogs());
+    }, [dispatch]);
 
     // Handle login btn press.
     const handleLogin = async (event) => {
@@ -48,14 +65,20 @@ const App = () => {
     const createNewBlog = async (blog) => {
         newBlogRef.current.toggleVisibility();
         try {
-            const response = await blogService.create(blog);
-            await updateBlogList();
+            dispatch(createNewBlogDispatch(blog));
+            dispatch(
+                setMessage([
+                    `A new blog ${blog.title} by ${blog.author} added`,
+                    false,
+                ])
+            );
+            /*await updateBlogList();
             dispatch(
                 setMessage([
                     `A new blog ${response.title} by ${response.author} added`,
                     false,
                 ])
-            );
+            );*/
             clearTimeout(timer);
             timer = setTimeout(() => {
                 dispatch(setMessage([null, false]));
@@ -72,6 +95,10 @@ const App = () => {
     // Update likes
     const updateLikes = async (blog) => {
         try {
+            let updatedBlog = { ...blog };
+            updatedBlog.likes += 1;
+            dispatch(updateLikesDispatch(updatedBlog));
+            /*
             const response = await blogService.update(blog);
             await updateBlogList();
             dispatch(
@@ -84,9 +111,9 @@ const App = () => {
             timer = setTimeout(() => {
                 dispatch(setMessage([null, false]));
             }, 5000);
-            return response;
+            return response;*/
         } catch (error) {
-            dispatch(setMessage(["Adding blog failed", true]));
+            dispatch(setMessage(["updating blog failed", true]));
             clearTimeout(timer);
             timer = setTimeout(() => {
                 dispatch(setMessage([null, false]));
@@ -133,22 +160,8 @@ const App = () => {
 
     const updateBlogList = async () => {
         const blogs = await blogService.getAll();
-        setBlogs(sortBlogs(blogs));
+        sortBlogs(blogs); //TODO update blog list
     };
-
-    useEffect(() => {
-        const loggedInUser = window.localStorage.getItem("bloguser");
-        if (loggedInUser) {
-            const user = JSON.parse(loggedInUser);
-            setUser(user);
-            blogService.setToken(user.token);
-        }
-    }, []);
-
-    // Initial data fetch
-    useEffect(() => {
-        updateBlogList();
-    }, []);
 
     if (user === null) {
         return (
@@ -205,7 +218,7 @@ const App = () => {
                 <CreateBlog createBlog={createNewBlog} />
             </Toggleable>
             {/* Show blogs */}
-            {blogs.map((blog) => (
+            {blogsStore.map((blog) => (
                 <Blog
                     key={blog.id}
                     blog={blog}
