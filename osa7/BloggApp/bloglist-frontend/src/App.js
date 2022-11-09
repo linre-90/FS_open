@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Pages
 import Home from "./Home";
 import Users from "./Users";
+import SingleUser from "./SingleUser";
 
 const App = () => {
     const [username, setUsername] = useState("");
@@ -109,6 +110,7 @@ const App = () => {
                 <Message message={message.message} panic={message.panic} />
             )}
             <Routes>
+                <Route path="/users/:id" element={<SingleUser />}></Route>
                 <Route path="/users" element={<Users />}></Route>
                 <Route path="/" element={<Home />}></Route>
             </Routes>
