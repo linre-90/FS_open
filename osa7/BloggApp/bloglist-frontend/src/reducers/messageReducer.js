@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = { message: null, panic: false };
 
+let timerId;
+
 const messageSlice = createSlice({
     name: "message",
     initialState,
@@ -15,6 +17,16 @@ const messageSlice = createSlice({
         },
     },
 });
+
+export const setNotificationWithTimer = (message, panic) => {
+    return async (dispatch) => {
+        dispatch(setMessage([message, panic]));
+        clearTimeout(timerId);
+        timerId = setTimeout(() => {
+            dispatch(setMessage([null, false]));
+        }, 3000);
+    };
+};
 
 export const { setMessage } = messageSlice.actions;
 export default messageSlice.reducer;

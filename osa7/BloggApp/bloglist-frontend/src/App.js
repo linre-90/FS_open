@@ -6,7 +6,7 @@ import { Message } from "./components/Message";
 import { CreateBlog } from "./components/CreateBlog";
 import { Toggleable } from "./components/Toggleable";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "./reducers/messageReducer";
+import { setNotificationWithTimer } from "./reducers/messageReducer";
 import { setUser } from "./reducers/userReducer";
 import {
     initializeBlogs,
@@ -14,7 +14,6 @@ import {
     updateLikesDispatch,
     deleteBlogDispatch,
 } from "./reducers/blogReducer";
-let timer;
 
 const App = () => {
     const [username, setUsername] = useState("");
@@ -55,11 +54,7 @@ const App = () => {
             // save user to local storage
             window.localStorage.setItem("bloguser", JSON.stringify(user));
         } catch (error) {
-            dispatch(setMessage(["Wrong credentials", true]));
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
+            dispatch(setNotificationWithTimer("Wrong credentials", true));
         }
     };
 
@@ -69,28 +64,13 @@ const App = () => {
         try {
             dispatch(createNewBlogDispatch(blog));
             dispatch(
-                setMessage([
+                setNotificationWithTimer(
                     `A new blog ${blog.title} by ${blog.author} added`,
-                    false,
-                ])
+                    false
+                )
             );
-            /*await updateBlogList();
-            dispatch(
-                setMessage([
-                    `A new blog ${response.title} by ${response.author} added`,
-                    false,
-                ])
-            );*/
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
         } catch (error) {
-            clearTimeout(timer);
-            setMessage(["Adding blog failed", true]);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
+            setNotificationWithTimer("Adding blog failed", true);
         }
     };
 
@@ -102,42 +82,24 @@ const App = () => {
             updatedBlog.user = blog.user.id;
             dispatch(updateLikesDispatch(updatedBlog));
             dispatch(
-                setMessage([
+                setNotificationWithTimer(
                     `A blog ${blog.title} by ${blog.author} updated`,
-                    false,
-                ])
+                    false
+                )
             );
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
         } catch (error) {
-            dispatch(setMessage(["updating blog failed", true]));
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
+            dispatch(setNotificationWithTimer("updating blog failed", true));
         }
     };
 
     const deleteBlog = async (blogid) => {
         try {
             dispatch(deleteBlogDispatch(blogid));
-            /*
-            const response = await blogService.deleteBlog(blogid);
-            await updateBlogList();
-            dispatch(setMessage(["A blog deleted succesfully", false]));
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
-            return response;*/
+            dispatch(
+                setNotificationWithTimer("A blog deleted succesfully", false)
+            );
         } catch (error) {
-            dispatch(setMessage(["Deleting blog failed", true]));
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                dispatch(setMessage([null, false]));
-            }, 5000);
+            dispatch(setNotificationWithTimer("Deleting blog failed", true));
         }
     };
 
@@ -145,25 +107,7 @@ const App = () => {
         window.localStorage.clear();
         window.location.href = "/";
     };
-    /*
-    const sortBlogs = (blogs) => {
-        const sorted = blogs.sort((a, b) => {
-            if (a.likes < b.likes || a.likes === undefined) {
-                return 1;
-            }
-            if (b.likes < a.likes || b.likes === undefined) {
-                return -1;
-            }
-            return 0;
-        });
-        return sorted;
-    };
-    
-    const updateBlogList = async () => {
-        const blogs = await blogService.getAll();
-        sortBlogs(blogs); //TODO update blog list
-    };
-*/
+
     if (reduxUser === null) {
         return (
             <div>
