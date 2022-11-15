@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Users from "./Users";
 import SingleUser from "./SingleUser";
+import Blog from "./components/Blog";
 
 const App = () => {
     const [username, setUsername] = useState("");
@@ -97,19 +98,15 @@ const App = () => {
 
     return (
         <Router>
-            {/* Notification */}
-            <h1>Blogs</h1>
-            <Navbar />
+            <Navbar handleLogout={logout} />
+            <h1>Blog app</h1>
 
-            <p>
-                {reduxUser.name} logged in <br></br>
-                <button onClick={logout}>logout</button>
-            </p>
             {/* Notification */}
             {message.message !== null && (
                 <Message message={message.message} panic={message.panic} />
             )}
             <Routes>
+                <Route path="/blogs/:id" element={<Blog />} />
                 <Route path="/users/:id" element={<SingleUser />}></Route>
                 <Route path="/users" element={<Users />}></Route>
                 <Route path="/" element={<Home />}></Route>

@@ -1,64 +1,83 @@
 import { React, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    updateLikesDispatch,
+    deleteBlogDispatch,
+} from "../reducers/blogReducer";
+import { setNotificationWithTimer } from "../reducers/messageReducer";
 
-const Blog = ({ blog, handleLikeUpdate, handleDelete }) => {
-    const [display, setDisplay] = useState(false);
-    const [blogState, setBlogState] = useState(blog);
+const Blog = () => {
+    const id = useParams().id;
+    const [blogState, setBlogState] = useState(null);
+    const navigate = useNavigate();
+    const blog = useSelector((state) => state.blog);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        setBlogState(blog);
+        setBlogState(blog.filter((x) => x.id === id)[0]);
     }, [blog]);
 
-    const updateDisplay = () => {
-        setDisplay(!display);
+    // Send updated blog to server and update state after.
+    const update = async () => {
+        try {
+            let updatedBlog = { ...blogState };
+            updatedBlog.likes += 1;
+            updatedBlog.user = blogState.user.id;
+            await dispatch(updateLikesDispatch(updatedBlog));
+            dispatch(
+                setNotificationWithTimer(
+                    `A blog ${blogState.title} by ${blogState.author} updated`,
+                    false
+                )
+            );
+        } catch (error) {
+            dispatch(setNotificationWithTimer("updating blog failed", true));
+        }
     };
 
-    // Send updated blog to server and update state after.
-    const update = () => handleLikeUpdate(blog);
-
     // Handles delete
-    const deleteBlog = () => {
+    const deleteBlog = async () => {
         if (
             window.confirm(
                 `Remove blog ${blogState.title} by ${blogState.author}`
             )
         ) {
-            handleDelete(blogState.id);
+            try {
+                await dispatch(deleteBlogDispatch(blogState.id));
+                dispatch(
+                    setNotificationWithTimer(
+                        "A blog deleted succesfully",
+                        false
+                    )
+                );
+            } catch (error) {
+                dispatch(
+                    setNotificationWithTimer("Deleting blog failed", true)
+                );
+            }
+            navigate("/");
         }
     };
 
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        paddingBottom: 10,
-        border: "solid",
-        borderWidth: 1,
-        marginBottom: 5,
-    };
-
     return (
-        <div className="blog" style={blogStyle}>
-            <div>
-                {blogState.title} {blogState.author}
-                {display ? (
-                    <button onClick={updateDisplay}>Hide</button>
-                ) : (
-                    <button onClick={updateDisplay}>View</button>
-                )}
-            </div>
-            {display ? (
+        <div>
+            {blogState !== null && (
                 <>
-                    <div>{blogState.url}</div>
+                    <h3>
+                        {blogState.title} {blogState.author}
+                    </h3>
+                    <a href={blogState.url}>{blogState.url}</a>
                     <div>
                         likes: {blogState.likes ? blogState.likes : 0}
                         <button onClick={update}>Like</button>
                     </div>
-                    <div>{blogState.author}</div>
+                    <p>Added by {blogState.author}</p>
                     <div>
                         <button onClick={deleteBlog}>Delete</button>
                     </div>
                 </>
-            ) : (
-                <></>
             )}
         </div>
     );

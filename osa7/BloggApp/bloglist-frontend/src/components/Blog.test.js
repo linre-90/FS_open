@@ -14,8 +14,8 @@ describe("<Togglable />", () => {
         likes: 5,
         id: "1",
         user: {
-            id: "2"
-        }
+            id: "2",
+        },
     };
 
     beforeEach(() => {
@@ -26,7 +26,9 @@ describe("<Togglable />", () => {
     // Tests that author and title div element are visible and no element
     // with url or likes is found.
     test("displays only author and title", () => {
-        const titleAuthorElement = screen.getByText(`${dummyBlog.title} ${dummyBlog.author}`);
+        const titleAuthorElement = screen.getByText(
+            `${dummyBlog.title} ${dummyBlog.author}`
+        );
         expect(titleAuthorElement).toBeDefined();
 
         const urlElement = screen.queryByText(dummyBlog.url);
@@ -57,6 +59,5 @@ describe("<Togglable />", () => {
         await user.dblClick(likeButton);
 
         expect(likeMockHandler.mock.calls).toHaveLength(2);
-
     });
 });
