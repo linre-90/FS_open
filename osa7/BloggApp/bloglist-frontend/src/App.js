@@ -13,6 +13,19 @@ import Home from "./Home";
 import Users from "./Users";
 import SingleUser from "./SingleUser";
 import Blog from "./components/Blog";
+import {
+    Container,
+    Input,
+    Button,
+    Typography,
+    InputAdornment,
+    AppBar,
+    Toolbar,
+} from "@mui/material";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import PersonIcon from "@mui/icons-material/Person";
+import { Stack } from "@mui/system";
+import EditLocationIcon from "@mui/icons-material/EditLocation";
 
 /**
  * App component handles routing and user related actions{login,logout}.
@@ -67,57 +80,102 @@ const App = () => {
     // Served if correct token is not found.
     if (reduxUser === null) {
         return (
-            <div>
-                <h1>Log in to application</h1>
-                {/* Notification */}
-
-                {message.message !== null && (
-                    <Message message={message.message} panic={message.panic} />
-                )}
-
+            <Container>
                 <form onSubmit={handleLogin}>
-                    <div>
-                        username
-                        <input
+                    <Stack
+                        spacing={{ xs: 2, sm: 2, md: 4 }}
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Typography
+                            variant="h4"
+                            style={{ textAlign: "center" }}
+                        >
+                            Log in
+                        </Typography>
+                        <Input
+                            autoComplete="current-username"
                             type="text"
                             value={username}
-                            id="username"
+                            //id="username"
                             onChange={({ target }) => setUsername(target.value)}
+                            variant="standard"
+                            placeholder="Username"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            }
                         />
-                    </div>
-                    <div>
-                        password
-                        <input
+
+                        <Input
+                            autoComplete="current-password"
                             type="password"
                             value={password}
-                            id="password"
+                            //id="password"
                             onChange={({ target }) => setPassword(target.value)}
+                            variant="standard"
+                            placeholder="Password"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <VpnKeyIcon />
+                                </InputAdornment>
+                            }
                         />
-                    </div>
-                    <button id="loginBtn" type="submit">
-                        login
-                    </button>
+                        <Button
+                            variant="outlined"
+                            id="loginBtn"
+                            type="submit"
+                            color="success"
+                            size="large"
+                        >
+                            login
+                        </Button>
+                        {message.message !== null && (
+                            <Message
+                                message={message.message}
+                                panic={message.panic}
+                            />
+                        )}
+                    </Stack>
                 </form>
-            </div>
+            </Container>
         );
     }
 
     // Served if user token is found and is valid.
     return (
         <Router>
-            <Navbar handleLogout={logout} />
-            <h1>Blog app</h1>
-
-            {/* Notification */}
-            {message.message !== null && (
-                <Message message={message.message} panic={message.panic} />
-            )}
-            <Routes>
-                <Route path="/blogs/:id" element={<Blog />} />
-                <Route path="/users/:id" element={<SingleUser />}></Route>
-                <Route path="/users" element={<Users />}></Route>
-                <Route path="/" element={<Home />}></Route>
-            </Routes>
+            <Container>
+                <Navbar handleLogout={logout} />
+                {/* Notification */}
+                {message.message !== null && (
+                    <Message message={message.message} panic={message.panic} />
+                )}
+                <Routes>
+                    <Route path="/blogs/:id" element={<Blog />} />
+                    <Route path="/users/:id" element={<SingleUser />}></Route>
+                    <Route path="/users" element={<Users />}></Route>
+                    <Route path="/" element={<Home />}></Route>
+                </Routes>
+                <AppBar position="fixed" sx={{ top: "auto", bottom: 0 }}>
+                    <Toolbar>
+                        {
+                            <Typography
+                                style={{
+                                    textAlign: "center",
+                                    width: "100%",
+                                }}
+                            >
+                                <EditLocationIcon />
+                                Blog app 9000
+                                <EditLocationIcon />
+                            </Typography>
+                        }
+                    </Toolbar>
+                </AppBar>
+                <Toolbar />
+            </Container>
         </Router>
     );
 };

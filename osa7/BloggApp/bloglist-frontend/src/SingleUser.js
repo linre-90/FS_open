@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userService from "./services/users";
-
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import BadgeIcon from "@mui/icons-material/Badge";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Container } from "@mui/system";
 /**
  * Displays single user.
  */
@@ -18,19 +22,32 @@ const SingleUser = () => {
     }, []);
 
     return (
-        <div>
+        <Container>
             {user && (
-                <div>
-                    <h2>{user.name}</h2>
-                    <h4>Added blogs</h4>
-                    <ul>
-                        {user.blogs.map((blog) => (
-                            <li key={blog.title + blog.url}>{blog.title}</li>
-                        ))}
-                    </ul>
-                </div>
+                <List>
+                    <ListItem disablePadding>
+                        <ListItemIcon>
+                            <BadgeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={user.name} />
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemIcon>
+                            <KeyboardArrowDownIcon />
+                        </ListItemIcon>
+                        <ListItemText secondary="Added blogs" />
+                    </ListItem>
+                    {user.blogs.map((blog) => (
+                        <ListItem key={blog.title + blog.url}>
+                            <ListItemIcon>
+                                <TextSnippetIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={blog.title} />
+                        </ListItem>
+                    ))}
+                </List>
             )}
-        </div>
+        </Container>
     );
 };
 

@@ -1,24 +1,28 @@
-import React, { useRef } from "react";
+import React from "react";
 import { CreateBlog } from "./components/CreateBlog";
-import { Toggleable } from "./components/Toggleable";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotificationWithTimer } from "./reducers/messageReducer";
 import { createNewBlogDispatch } from "./reducers/blogReducer";
 import { Link } from "react-router-dom";
-
+import {
+    Card,
+    Typography,
+    CardContent,
+    CardActions,
+    Button,
+} from "@mui/material";
+import { Stack } from "@mui/system";
 /**
  * Applications main front page.
  * Displays listing of blogs and provides new blog creation function.
  */
 const Home = () => {
-    const newBlogRef = useRef();
     const dispatch = useDispatch();
     //blog
     const blogsStore = useSelector((state) => state.blog);
 
     // Post new blog
     const createNewBlog = async (blog) => {
-        newBlogRef.current.toggleVisibility();
         try {
             dispatch(createNewBlogDispatch(blog));
             dispatch(
@@ -34,19 +38,39 @@ const Home = () => {
 
     return (
         <div>
-            <Toggleable buttonLabel={"Create new"} ref={newBlogRef}>
-                <CreateBlog createBlog={createNewBlog} />
-            </Toggleable>
-            {/* Show blogs */}
-            {blogsStore.map((blog) => (
-                <Link
-                    style={{ display: "block" }}
-                    to={`/blogs/${blog.id}`}
-                    key={blog.id}
-                >
-                    {blog.title}
-                </Link>
-            ))}
+            <CreateBlog createBlog={createNewBlog} />
+            <Stack spacing={{ xs: 2, sm: 2, md: 4 }}>
+                {/* Show blogs */}
+                {blogsStore.map((blog) => (
+                    <Card
+                        variant="outlined"
+                        key={blog.id}
+                        sx={{ minWidth: 275 }}
+                    >
+                        <CardContent>
+                            <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                            >
+                                {blog.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                By: {blog.author}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button
+                                LinkComponent={Link}
+                                to={`/blogs/${blog.id}`}
+                                size="small"
+                            >
+                                Open
+                            </Button>
+                        </CardActions>
+                    </Card>
+                ))}
+            </Stack>
         </div>
     );
 };

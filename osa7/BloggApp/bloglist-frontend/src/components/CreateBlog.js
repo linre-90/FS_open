@@ -1,5 +1,16 @@
 import { React, useState } from "react";
 import PropTypes from "prop-types";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogContentText,
+    TextField,
+    DialogActions,
+    Fab,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 /**
  * Component to create new blog.
@@ -8,49 +19,80 @@ const CreateBlog = ({ createBlog }) => {
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [url, setUrl] = useState("");
+    const [open, setOpen] = useState(false);
 
     // Post new blog
-    const createNewBlog = async (event) => {
-        event.preventDefault();
+    const createNewBlog = async () => {
         const newBlog = { title, url, author };
         setTitle("");
         setAuthor("");
         setUrl("");
         createBlog(newBlog);
+        handleClose();
+    };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
         <>
-            <h2>Create new</h2>
-            <form onSubmit={createNewBlog}>
-                <div>
-                    title:
-                    <input
+            <Fab
+                sx={{ position: "fixed", top: "auto", right: 40, bottom: 90 }}
+                onClick={handleClickOpen}
+                color="primary"
+                aria-label="add"
+            >
+                <AddIcon />
+            </Fab>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Create blog</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Fill the fields to create new blog.
+                    </DialogContentText>
+                    <TextField
                         id="title"
-                        value={title}
+                        autoFocus
+                        margin="dense"
+                        label="Title"
+                        type="text"
+                        fullWidth
+                        variant="standard"
                         onChange={({ target }) => setTitle(target.value)}
+                        value={title}
                     />
-                </div>
-                <div>
-                    author:
-                    <input
+                    <TextField
                         id="author"
-                        value={author}
+                        autoFocus
+                        margin="dense"
+                        label="Author"
+                        type="text"
+                        fullWidth
+                        variant="standard"
                         onChange={({ target }) => setAuthor(target.value)}
+                        value={author}
                     />
-                </div>
-                <div>
-                    url:
-                    <input
+                    <TextField
                         id="url"
-                        value={url}
+                        autoFocus
+                        margin="dense"
+                        label="Url"
+                        type="text"
+                        fullWidth
+                        variant="standard"
                         onChange={({ target }) => setUrl(target.value)}
+                        value={url}
                     />
-                </div>
-                <button id="submitBlog" type="submit">
-                    save
-                </button>
-            </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={createNewBlog}>Save</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

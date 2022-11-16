@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert } from "@mui/material";
 
 /**
  * Component to display application state for user.
@@ -7,21 +8,14 @@ import React from "react";
  */
 const Message = ({ message, panic }) => {
     // normal style
-    let style = {
-        color: "green",
-        border: "1px solid green",
-        backgroundColor: "rgba(201, 76, 76, 0.3)",
-        padding: "10px",
-        borderRadius: "10px",
-    };
+    let severity = "success";
 
     // Error style overwrite
     if (panic) {
-        style.color = "red";
-        style.border = "1px solid red";
+        severity = "error";
     }
 
-    return <h2 style={style}>{message}</h2>;
+    return <Alert severity={severity}>{message}</Alert>;
 };
 
 export { Message };
