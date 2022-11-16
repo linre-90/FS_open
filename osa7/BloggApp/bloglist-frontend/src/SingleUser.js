@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userService from "./services/users";
 
+/**
+ * Displays single user.
+ */
 const SingleUser = () => {
     const id = useParams().id;
     const [user, setUser] = useState(null);

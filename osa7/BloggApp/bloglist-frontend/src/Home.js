@@ -6,6 +6,10 @@ import { setNotificationWithTimer } from "./reducers/messageReducer";
 import { createNewBlogDispatch } from "./reducers/blogReducer";
 import { Link } from "react-router-dom";
 
+/**
+ * Applications main front page.
+ * Displays listing of blogs and provides new blog creation function.
+ */
 const Home = () => {
     const newBlogRef = useRef();
     const dispatch = useDispatch();

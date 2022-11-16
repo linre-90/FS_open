@@ -7,15 +7,22 @@ import {
     deleteBlogDispatch,
 } from "../reducers/blogReducer";
 import { setNotificationWithTimer } from "../reducers/messageReducer";
+import Comments from "./Comments";
 
+/**
+ * Component that renders blog post and handles its updates.
+ */
 const Blog = () => {
+    // blog post id in route
     const id = useParams().id;
     const [blogState, setBlogState] = useState(null);
     const navigate = useNavigate();
     const blog = useSelector((state) => state.blog);
     const dispatch = useDispatch();
 
+    // set state from store.
     useEffect(() => {
+        // Filter blog where id is url id.
         setBlogState(blog.filter((x) => x.id === id)[0]);
     }, [blog]);
 
@@ -37,7 +44,26 @@ const Blog = () => {
         }
     };
 
-    // Handles delete
+    // Add new comment to blog posting.
+    const addCommentToBlog = async (comment) => {
+        try {
+            // Clone old state, update old state comments, set user and call async redux dispatcher;
+            let updatedBlog = { ...blogState };
+            updatedBlog.comments = [...updatedBlog.comments, comment];
+            updatedBlog.user = blogState.user.id;
+            await dispatch(updateLikesDispatch(updatedBlog));
+            dispatch(
+                setNotificationWithTimer(
+                    `A blog ${blogState.title} by ${blogState.author} commented.`,
+                    false
+                )
+            );
+        } catch (error) {
+            dispatch(setNotificationWithTimer("updating blog failed", true));
+        }
+    };
+
+    // Handles blog posting deletion. Redirects back to home after succesfull delete.
     const deleteBlog = async () => {
         if (
             window.confirm(
@@ -63,7 +89,7 @@ const Blog = () => {
 
     return (
         <div>
-            {blogState !== null && (
+            {blogState && (
                 <>
                     <h3>
                         {blogState.title} {blogState.author}
@@ -77,6 +103,10 @@ const Blog = () => {
                     <div>
                         <button onClick={deleteBlog}>Delete</button>
                     </div>
+                    <Comments
+                        comments={blogState.comments}
+                        addComment={addCommentToBlog}
+                    />
                 </>
             )}
         </div>

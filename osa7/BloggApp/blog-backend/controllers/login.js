@@ -1,3 +1,6 @@
+/**
+ * Login and user cration related route handling.
+ */
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const router = require("express").Router();

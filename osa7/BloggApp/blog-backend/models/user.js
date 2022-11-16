@@ -1,3 +1,6 @@
+/**
+ * User mongoose schema.
+ */
 const mongoose = require("mongoose");
 
 const schema = mongoose.Schema({
@@ -16,6 +19,9 @@ const schema = mongoose.Schema({
     ],
 });
 
+// Convert mongo objectId() to string in returned entities.
+// Delete _id and _v.
+// Delete user passsword hash.
 schema.set("toJSON", {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString();

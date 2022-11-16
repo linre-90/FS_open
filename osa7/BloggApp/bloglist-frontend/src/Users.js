@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import userService from "./services/users";
 import User from "./components/User";
 
+/**
+ * Shows listing of all users.
+ */
 const Users = () => {
     const [users, setUsers] = useState([]);
 

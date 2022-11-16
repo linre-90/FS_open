@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
 
+// Reducer slice
 const blogReducer = createSlice({
     name: "blogs",
     initialState: [],
@@ -24,6 +25,7 @@ const blogReducer = createSlice({
     },
 });
 
+// Async state update that fetches initial state from db.
 export const initializeBlogs = () => {
     return async (dispatch) => {
         const blogs = await blogService.getAll();
@@ -31,6 +33,7 @@ export const initializeBlogs = () => {
     };
 };
 
+// Async state update that dispatches createBlog reducer.
 export const createNewBlogDispatch = (newBlog) => {
     return async (dispatch) => {
         const blog = await blogService.create(newBlog);
@@ -38,6 +41,8 @@ export const createNewBlogDispatch = (newBlog) => {
     };
 };
 
+// Async state update that is poorly named. Should be simply update.
+// Can be used to update blog post in db and store.
 export const updateLikesDispatch = (blogToupdate) => {
     return async (dispatch) => {
         const blog = await blogService.update(blogToupdate);
@@ -45,6 +50,7 @@ export const updateLikesDispatch = (blogToupdate) => {
     };
 };
 
+// Async state update that deletes blog from store and database.
 export const deleteBlogDispatch = (blogId) => {
     return async (dispatch) => {
         await blogService.deleteBlog(blogId);

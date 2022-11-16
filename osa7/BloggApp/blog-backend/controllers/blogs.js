@@ -1,3 +1,7 @@
+/**
+ * Blog related route handling.
+ */
+
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 

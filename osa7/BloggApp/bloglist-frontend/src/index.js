@@ -7,6 +7,7 @@ import messageReducer from "./reducers/messageReducer";
 import blogReducer from "./reducers/blogReducer";
 import userReducer from "./reducers/userReducer";
 
+// Configure store
 const store = configureStore({
     reducer: {
         message: messageReducer,
@@ -15,6 +16,7 @@ const store = configureStore({
     },
 });
 
+// Render app and provide store
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
         <App />

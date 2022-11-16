@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+/**
+ * Navbar component.
+ */
 const Navbar = ({ handleLogout }) => {
     const reduxUser = useSelector((state) => state.user);
 

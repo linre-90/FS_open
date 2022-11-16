@@ -14,6 +14,9 @@ import Users from "./Users";
 import SingleUser from "./SingleUser";
 import Blog from "./components/Blog";
 
+/**
+ * App component handles routing and user related actions{login,logout}.
+ */
 const App = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -23,6 +26,7 @@ const App = () => {
     // user
     const reduxUser = useSelector((state) => state.user);
 
+    // Perform auto login if browser local storage has correct token.
     useEffect(() => {
         const loggedInUser = window.localStorage.getItem("bloguser");
         if (loggedInUser) {
@@ -32,6 +36,7 @@ const App = () => {
         }
     }, []);
 
+    // Update components on store dispatchs.
     useEffect(() => {
         dispatch(initializeBlogs());
     }, [dispatch]);
@@ -39,7 +44,6 @@ const App = () => {
     // Handle login btn press.
     const handleLogin = async (event) => {
         event.preventDefault();
-
         try {
             const user = await loginservice.login({ username, password });
             dispatch(setUser(user));
@@ -54,11 +58,13 @@ const App = () => {
         }
     };
 
+    // Log user out. Removes token from local storage.
     const logout = () => {
         window.localStorage.clear();
         window.location.href = "/";
     };
 
+    // Served if correct token is not found.
     if (reduxUser === null) {
         return (
             <div>
@@ -96,6 +102,7 @@ const App = () => {
         );
     }
 
+    // Served if user token is found and is valid.
     return (
         <Router>
             <Navbar handleLogout={logout} />

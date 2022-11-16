@@ -1,3 +1,6 @@
+/**
+ * Blog mongoose schema.
+ */
 const mongoose = require("mongoose");
 
 const schema = mongoose.Schema({
@@ -15,8 +18,13 @@ const schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    comments: {
+        type: Array,
+    },
 });
 
+// Convert mongo objectId() to string in returned entities.
+// Delete _id and _v.
 schema.set("toJSON", {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString();
