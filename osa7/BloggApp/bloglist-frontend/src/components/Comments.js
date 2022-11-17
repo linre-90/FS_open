@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Typography, TextField, Button } from "@mui/material";
+import {
+    Typography,
+    TextField,
+    Button,
+    List,
+    ListItemText,
+    ListItemAvatar,
+    ListItem,
+} from "@mui/material";
 import { setNotificationWithTimer } from "../reducers/messageReducer";
 import { useDispatch } from "react-redux";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 /**
  * Component display blog post comments.
@@ -50,15 +59,18 @@ const Comments = ({ comments, addComment }) => {
                 Add
             </Button>
             <Typography variant="body1">Comments</Typography>
-            <ul>
+            <List>
                 {comments.map((comment) => {
                     return (
-                        <li key={comment + comments.indexOf(comment)}>
-                            {comment}
-                        </li>
+                        <ListItem key={comment + comments.indexOf(comment)}>
+                            <ListItemAvatar>
+                                <ArrowRightIcon></ArrowRightIcon>
+                            </ListItemAvatar>
+                            <ListItemText secondary={comment} />
+                        </ListItem>
                     );
                 })}
-            </ul>
+            </List>
         </div>
     );
 };
