@@ -38,7 +38,7 @@ const Comments = ({ comments, addComment }) => {
     };
 
     return (
-        <div>
+        <>
             <Typography variant="body1">Comment</Typography>
             <TextField
                 fullWidth
@@ -71,7 +71,7 @@ const Comments = ({ comments, addComment }) => {
                     );
                 })}
             </List>
-        </div>
+        </>
     );
 };
 
