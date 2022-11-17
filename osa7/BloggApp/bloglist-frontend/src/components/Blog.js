@@ -8,6 +8,18 @@ import {
 } from "../reducers/blogReducer";
 import { setNotificationWithTimer } from "../reducers/messageReducer";
 import Comments from "./Comments";
+import {
+    Typography,
+    Badge,
+    IconButton,
+    Card,
+    CardContent,
+    CardActions,
+} from "@mui/material";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Link } from "react-router-dom";
+import { Link as MaterialLink } from "@mui/material";
 
 /**
  * Component that renders blog post and handles its updates.
@@ -91,22 +103,68 @@ const Blog = () => {
         <div>
             {blogState && (
                 <>
-                    <h3>
-                        {blogState.title} {blogState.author}
-                    </h3>
-                    <a href={blogState.url}>{blogState.url}</a>
-                    <div>
-                        likes: {blogState.likes ? blogState.likes : 0}
-                        <button onClick={update}>Like</button>
-                    </div>
-                    <p>Added by {blogState.author}</p>
-                    <div>
-                        <button onClick={deleteBlog}>Delete</button>
-                    </div>
-                    <Comments
-                        comments={blogState.comments}
-                        addComment={addCommentToBlog}
-                    />
+                    <Card>
+                        <CardContent>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                Title
+                            </Typography>
+                            <Typography variant="h6">
+                                {blogState.title}
+                            </Typography>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                URL
+                            </Typography>
+                            <MaterialLink to={blogState.url} component={Link}>
+                                <Typography variant="body1">
+                                    {blogState.url}
+                                </Typography>
+                            </MaterialLink>
+                            <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                            >
+                                Author
+                            </Typography>
+                            <Typography variant="body1">
+                                {blogState.author}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <IconButton color="error" onClick={deleteBlog}>
+                                <DeleteForeverIcon />
+                            </IconButton>
+                            <IconButton
+                                style={{ marginLeft: "2rem" }}
+                                onClick={update}
+                            >
+                                <Badge
+                                    badgeContent={
+                                        blogState.likes ? blogState.likes : 0
+                                    }
+                                    color="primary"
+                                >
+                                    <ThumbUpIcon color="action" />
+                                </Badge>
+                            </IconButton>
+                        </CardActions>
+                    </Card>
+                    <Card style={{ marginTop: "2rem" }}>
+                        <CardContent>
+                            <Comments
+                                comments={blogState.comments}
+                                addComment={addCommentToBlog}
+                            />
+                        </CardContent>
+                    </Card>
                 </>
             )}
         </div>
